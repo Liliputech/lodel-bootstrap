@@ -1,0 +1,1022 @@
+<!--[
+
+   LODEL - Logiciel d'Edition ELectronique.
+   Copyright (c) 2001-2002, Ghislain Picard, Marin Dacos   
+   Copyright (c) 2003-2004, Ghislain Picard, Marin Dacos, Luc Santeramo, Nicolas Nutten, Anne Gentil-Beccot
+   Copyright (c) 2005-2006, Ghislain Picard, Marin Dacos, Luc Santeramo, Nicolas Nutten, Anne Gentil-Beccot
+   
+Home page: http://www.lodel.org
+   E-Mail: lodel@lodel.org
+                             All Rights Reserved
+      This program is free software; you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation; either version 2 of the License, or
+      (at your option) any later version.
+      This program is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      GNU General Public License for more details.
+      You should have received a copy of the GNU General Public License
+      along with this program; if not, write to the Free Software
+      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.]-->
+
+<!--[ Macros Techniques ]-->
+
+<DEFMACRO NAME="OUVRIR_HTML">
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
+		<head>
+</DEFMACRO> 
+
+<DEFMACRO NAME="FERMER_HTML">
+		</body>
+	</html>
+</DEFMACRO>
+
+<DEFMACRO NAME="ENTETE_XML">
+	<?php 
+	header("Content-type: application/xml");
+	echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+	?>
+</DEFMACRO>
+
+<DEFMACRO NAME="DEFINIR_CHARSET">
+	<meta http-equiv="Content-Type" content="text/html; charset=[#CHARSET]" />
+</DEFMACRO>
+
+<DEFMACRO NAME="INSERER_FEUILLE_DE_STYLES">
+
+		<LET VAR="IDRECUP">
+			[#ID]
+		</LET>
+
+		<LET VAR="TITREFLUX">
+			<IF COND="[#G_TITLE]"> [#G_TITLE|replacequotationmark|textebrut] 
+			<ELSE/>
+				<LOOP NAME="listeIndexAuteurs" TABLE="persontypes" WHERE="persontypes.id='[#IDRECUP]'">
+					Index [#TITLE]
+				</LOOP>
+				<LOOP NAME="indexAuteur" TABLE="persons, persontypes" WHERE="persons.id='[#IDRECUP]' AND persons.idtype = persontypes.id">
+					[#G_FIRSTNAME|removenotes] [#G_FAMILYNAME|removenotes]
+				</LOOP>
+				<LOOP NAME="listeIndexGeneral" TABLE="entrytypes" WHERE="entrytypes.id='[#IDRECUP]'">
+					[#TITLE]
+				</LOOP>
+				<LOOP NAME="indexGeneral" TABLE="entries" WHERE="entries.id='[#IDRECUP]'">
+					[#G_NAME]
+				</LOOP>
+				<LOOP NAME="individu" TABLE="individus" WHERE="individus.identity='[#IDRECUP]'">
+					[#PRENOM] [#NOM]
+				</LOOP>
+			</IF>
+		</LET>
+
+		<link rel="stylesheet" type="text/css" href="css/styles_site.css" media="screen" title="Ecran" />
+		<link rel="stylesheet" type="text/css" media="print" href="css/styles_site_print.css"  title="Impression" />
+		<link rel="alternate" type="application/rss+xml" title="Actualités de <MACRO NAME="NOM_SITE" />" href="index.[#EXTENSIONSCRIPTS]?page=backend&amp;format=rssdocuments" />
+
+		<link rel="alternate" type="application/rss+xml" title="Flux RSS de [#TITREFLUX]" href="index.[#EXTENSIONSCRIPTS]?page=backend&amp;format=rss&amp;ident=[#IDRECUP]" />
+
+		<script type="text/javascript" src="js/site.js"></script>
+	</head>
+	<body> 
+</DEFMACRO>
+
+<DEFMACRO NAME="METADONNEES">
+	<meta name="GENERATOR" content="Lodel [#VERSION]" />
+	<meta name="DESCRIPTION" content="<MACRO NAME="DESCRIPTION_SITE_POUR_METAS">" />
+	<meta name="URL" content="[#CURRENTURL]" />
+		
+	<LOOP NAME="meta_auteurs" TABLE="auteurs" WHERE="type='auteur'" WHERE="iddocument='[#ID]'" ORDER="rank">
+		<meta name="author" content="[#NOMFAMILLE], [#PRENOM]" />
+	</LOOP>
+	
+	<LOOP NAME="meta_motscles" TABLE="relations, entries" WHERE="id1 = '[#ID]' AND id2 = entries.id">
+		<meta name="KEYWORDS" content="[#G_NAME]" />
+	</LOOP>
+	
+	<!--[ METADONNEES DUBLIN CORE ]-->
+	
+	<meta name="DC.Publisher" content="<MACRO NAME="EDITEUR_SITE_POUR_METAS">" />
+	<meta name="DC.Rights" content="<MACRO NAME="DROITS_POUR_METAS">" />
+        <meta name="DC.Source" content="[#CURRENTURL|dirname]" />
+	<meta name="DC.Type" content="text" />
+	<meta name="DC.Format" content="text/html" />
+	<meta name="DC.Language" content="fr" />
+	<meta name="DC.Identifier" content="[#CURRENTURL]" />
+	<meta name="DC.Title" content="[#TITRE|textebrut|replacequotationmark] [#SOUSTITRE|replacequotationmark|textebrut]" />
+
+	<LOOP NAME="meta_dc_motscles" TABLE="relations, entries" WHERE="id1 = '[#ID]' AND id2 = entries.id">
+		<meta name="DC.Subject" content="[#G_NAME]" />
+	</LOOP>
+	
+	<LOOP NAME="meta_dc_auteurs" TABLE="auteurs" WHERE="type='auteur'"  WHERE="iddocument='[#ID]'" ORDER="rank">
+		<meta name="DC.Creator" content="[#NOMFAMILLE], [#PRENOM]" />
+	</LOOP>
+	
+	<MACRO NAME="DATE_PUBLICATION_PARENTE_POUR_METAS">
+	
+	<IF COND="[#RESUME:FR]">
+		<meta name="DC.Description" lang="fr" content="[(#RESUME:FR|textebrut|replacequotationmark)]" />
+	<ELSE/>
+		<meta name="DC.Description" lang="fr" content="[(#TEXTE|textebrut|replacequotationmark|couper(1500))]" />
+	</IF>
+	<IF COND="[#RESUME:EN]">
+		<meta name="DC.Description" lang="en" content="[(#RESUME:EN|textebrut|replacequotationmark)]" />
+	</IF>
+</DEFMACRO>
+
+
+<DEFMACRO NAME="METADONNEES_POUR_SOMMAIRES">
+	<meta name="GENERATOR" content="Lodel [#VERSION]" />
+	<meta name="DESCRIPTION" content="<MACRO NAME="DESCRIPTION_SITE_POUR_METAS" />" />
+	<meta name="url" content="[(#CURRENTURL|dirname)]/[(#ID|makeurlwithid('sommaire'))]" />
+	
+	<!--[ METADONNEES DUBLIN CORE ]-->
+	<meta name="DC.Publisher" content="<MACRO NAME="EDITEUR_SITE_POUR_METAS" />" />
+	<meta name="DC.Rights" content="<MACRO NAME="DROITS_POUR_METAS" />" />
+	<meta name="DC.Source" content="[#CURRENTURL|dirname]" />
+	<meta name="DC.Type" content="text" />
+	<meta name="DC.Format" content="text/html" />
+	<meta name="DC.Language" content="fr" />
+	<!--[ <meta name="DC.Relation" content="" /> ]-->
+	
+	<meta name="DC.Identifier" content="[#CURRENTURL|dirname]/[#ID|makeurlwithid('sommaire')]" />
+	
+	<meta name="DC.Title" content="Sommaire : [#TITRE|textebrut|replacequotationmark] [#SOUSTITRE|replacequotationmark|textebrut]" />
+	<meta name="DC.Date" content="[#DATE]" />
+	<meta name="DC.Description" lang="fr" content="<MACRO NAME="DESCRIPTION_META_SOMMAIRE" />" />
+</DEFMACRO>
+
+<DEFMACRO NAME="METADONNEES_POUR_INDEX">
+	<!--[ METADONNEES HTML ]-->
+	<meta name="GENERATOR" content="Lodel [#VERSION]" />
+	<meta name="DESCRIPTION" content="<MACRO NAME="DESCRIPTION_SITE_POUR_METAS" />" />
+        <meta name="url" content="[(#CURRENTURL|dirname)]" />
+	<!--[ METADONNEES DUBLIN CORE ]-->
+	<meta name="DC.Type" content="text" />
+	<meta name="DC.Format" content="text/html" />
+	<meta name="DC.Identifier" content="[(#CURRENTURL|dirname)]" />
+	<meta name="DC.Source" content="[(#CURRENTURL|dirname)]" />
+	<meta name="DC.Language" content="fr" />
+<!--[	<meta name="DC.Relation" content="" />  ]-->
+	<meta name="DC.Rights" content="<MACRO NAME="DROITS_POUR_METAS" />" />
+	<meta name="DC.Publisher" content="<MACRO NAME="EDITEUR_SITE_POUR_METAS" />" />
+</DEFMACRO>
+
+<DEFMACRO NAME="METADONNEES_POUR_AUTEURS">
+	<meta name="DC.Title" content="Index par auteurs." />
+	<meta name="DC.Description" lang="fr" content="<MACRO NAME="DESCRIPTION_SITE_POUR_METAS" />. Index par auteurs." />
+</DEFMACRO>
+
+<DEFFUNC NAME="SEARCH_ENGINE_PUBLIC" OPTIONAL="query,qstatus,qtype,qfield">
+
+	<form action="search.[#EXTENSIONSCRIPTS]" method="get">
+		<fieldset>
+		<input type="text" id="query" name="query" value="<IF COND="![#QUERY]">Votre recherche<ELSE/>[#QUERY|htmlspecialchars|stripslashes]</IF>"onfocus="if(this.value=='Votre recherche')this.value='';"/>
+		<input class="searchbutton" type="submit" name="submit_s" value="<IF COND="[#QUERY]">Affiner la recherche<ELSE/>Rechercher</IF>" />
+		<a href="#" onclick="if(document.getElementById('advanced_search').style.display=='none'){document.getElementById('advanced_search').style.display='block';} else {document.getElementById('advanced_search').style.display='none';}; return(false); ">
+			<span class="texte_petit">avanc&eacute;e</span>
+		</a>
+		</fieldset>
+		<div  id="advanced_search" <IF COND="![#QSTATUS] AND ![#QTYPE] AND ![#QFIELD]">style="display : none"</IF>>
+		<fieldset class="searchfieldset">
+		<legend>Recherche avanc&eacute;e</legend>
+		<select id="qnbresults" name="qnbresults" class="searchfields">
+			<option value="10" <IF COND="[#QNBRESULTS] EQ 10">selected="selected"</IF>>10 r&eacute;sultats par page</option>
+			<option value="20" <IF COND="[#QNBRESULTS] EQ 20">selected="selected"</IF>>20 r&eacute;sultats par page</option>
+			<option value="50" <IF COND="[#QNBRESULTS] EQ 50">selected="selected"</IF>>50 r&eacute;sultats par page</option>
+			<option value="100" <IF COND="[#QNBRESULTS] EQ 100">selected="selected"</IF>>100 r&eacute;sultats par page</option>
+		</select>
+		<LOOP NAME="listtypes" TABLE="types" WHERE="search=1"ORDER="rank" >
+		<BEFORE>
+			<label for="qtype">Type :</label>
+			<select  id="qtype" name="qtype" class="searchfields" <!--[onchange="updatefields(this);"]-->>
+			<option id="[#CLASS]_[#ID]" value=""> -- Tous -- </option>
+		</BEFORE>
+		<DO>
+			<option id="[#CLASS]_[#ID]" value="[#ID]"<IF COND="[#ID] EQ [#QTYPE]">selected="selected"</IF>>[#TITLE]</option>
+		</DO>
+		<AFTER>
+			</select>
+		</AFTER>
+		</LOOP>
+		
+		<label for="qfield">Champ : </label>
+		<select id="qfield" name="qfield" class="searchfields">
+			<option value=""> -- Tous --</option>
+			<option value="DC.Title" <IF COND="[#QFIELD] EQ 'DC.Title'">selected="selected"</IF>>Titre</option>
+			<option value="DC.Description" <IF COND="[#QFIELD] EQ 'DC.Description'">selected="selected"</IF>>Description</option>
+			<option value="DC.Format" <IF COND="[#QFIELD] EQ 'DC.Format'">selected="selected"</IF>>Format</option>
+			<option value="DC.Source" <IF COND="[#QFIELD] EQ 'DC.Source'">selected="selected"</IF>>Source</option>
+			<option value="DC.Language" <IF COND="[#QFIELD] EQ 'DC.Language'">selected="selected"</IF>>Langue</option>
+			<option value="DC.Coverage" <IF COND="[#QFIELD] EQ 'DC.Coverage'">selected="selected"</IF>>Couverture</option>
+			<option value="DC.Rights" <IF COND="[#QFIELD] EQ 'DC.Rights'">selected="selected"</IF>>Copyrights</option>
+		</select>
+		
+		</fieldset>
+		</div>
+	</form>		
+</DEFFUNC>
+
+<!--[ Fin Macros Techniques ]-->
+
+
+<!--[ Macros Communes à toutes les pages ]-->
+
+<DEFMACRO NAME="PRELUDE">
+	<div id="main">	
+		<div id="accessible">
+			<a href="#menu">Aller à la navigation</a>
+			&nbsp;|&nbsp;
+			<a href="#inside">Aller au contenu</a>
+		</div>		
+		<h1 id="cartouche">
+			<a href="index.[#EXTENSIONSCRIPTS]">
+			<MACRO NAME="NOM_SITE" />
+			<br class="nobr" />
+			<span class="sousTitre">
+			<MACRO NAME="DESCRIPTION_SITE" />
+			</span>
+			</a>
+		</h1>
+		<div id="content" class="<IF COND="[#TYPE|is_array]">[#TYPE.TYPE]<ELSE/>[#TYPE]</IF>">
+			<div id="inside" class="<IF COND="[#TYPE|is_array]">[#TYPE.TYPE]<ELSE/>[#TYPE]</IF>">
+				<MACRO NAME="ARIANE">
+</DEFMACRO>
+
+<DEFMACRO NAME="CONCLUSION"> 
+			</div> <!--[ Fin #inside ]-->
+			<USE TEMPLATEFILE="barre" />
+			<MACRO NAME="FOOTER" /> 
+		</div> <!--[ Fin #content ]-->
+		
+	</div>	<!--[ Fin #main ]-->
+</DEFMACRO>
+
+<DEFMACRO NAME="FOOTER"> 
+	<div id="footer"><a href="http://www.lodel.org">édité par Lodel</a> | <a href="lodel/">accès réservé</a></div>
+</DEFMACRO>
+
+<!--[ Fin Macros Communes à toutes les pages ]-->
+
+
+<!--[ Macros identifiant le site pour titres et métadonnées ]-->
+<!--[ Si le nom de la macro se termine par METAS, N'insérez que des caractères autorisés dans les balises méta, surtout pas de html !!! ]-->
+
+<DEFMACRO NAME="NOM_SITE">
+	<LOOP NAME="getSiteName" TABLE="sites" WHERE="name = '[#SITE]' AND status GT 0">
+		[#TITLE]
+	</LOOP>
+</DEFMACRO>
+
+<DEFMACRO NAME="NOM_SITE_METAS">
+	<LOOP NAME="getSiteNameBrut" TABLE="sites" WHERE="name = '[#SITE]' AND status GT 0">
+		[#TITLE|textebrut]
+	</LOOP>
+</DEFMACRO>
+
+<DEFMACRO NAME="DROITS_POUR_METAS">
+	<!--[<LOOP NAME="getRights" TABLE="">
+	</LOOP>]-->
+</DEFMACRO>
+
+<DEFMACRO NAME="EDITEUR_SITE_POUR_METAS">
+	Nom de votre éditeur
+</DEFMACRO>
+
+<DEFMACRO NAME="DESCRIPTION_SITE">
+	Description de votre site
+</DEFMACRO>
+
+<DEFMACRO NAME="DESCRIPTION_SITE_POUR_METAS">
+	Description de votre site
+</DEFMACRO>
+
+<DEFMACRO NAME="DESCRIPTION_META_SOMMAIRE">
+<!--[ ****************************************************************** ]-->
+<!--[ version 2.0                                                        ]-->
+<!--[ Cette macro est destinée à l'affichage des métadonnées.            ]-->
+<!--[ ****************************************************************** ]-->
+	<LOOP NAME="extrait_premier_article" TABLE="textes" ORDER="rank ASC" WHERE="idparent='[#ID]'" LIMIT="0,1">
+		<DO>
+			<IF COND="[#TEXTE]">
+				Extrait du premier article du numéro: 
+				[(#TEXTE|removenotes|couper(1500)|textebrut|replacequotationmark)]
+			<ELSE/>
+				<LOOP NAME="desc_meta_sommaire" TABLE="textes, relations" WHERE="id1='[#IDPARENT]' AND id=id2">
+					<DO>
+						<IF COND="[#TITRE]">[(#TITRE|replacequotationmark)],</IF>
+						<IF COND="[#SOUSTITRE]">[(#SOUSTITRE|replacequotationmark)]</IF>
+					</DO>
+				</LOOP>
+			</IF>
+		</DO>
+	</LOOP>
+</DEFMACRO>
+
+
+<DEFMACRO NAME="METADONNEES_POUR_PAGE_ACCUEIL">
+	<meta name="DC.Title" content="<MACRO NAME="NOM_SITE_METAS" />" />
+	<meta name="DC.Description" content="<MACRO NAME="DESCRIPTION_SITE_POUR_METAS" />. Page d'accueil" />
+</DEFMACRO>
+
+<DEFMACRO NAME="DATE_PUBLICATION_PARENTE_POUR_METAS">
+	<LOOP NAME="date_publication_parente_pour_metas" TABLE="publications, relations" WHERE="id2='[#IDPARENT]' AND type!='regroupement' AND id=id1" ORDER="degree"> 
+		<DO>
+			<IF COND="[#DATE|isadate]">
+				<meta name="DC.Date" content="[#DATE]" />
+			</IF>
+		</DO>
+	</LOOP>
+</DEFMACRO>
+
+<!--[ Fin Macros identifiant le site pour titres et métadonnées ]-->
+
+<!--[ Macros d'affichage ]-->
+
+<DEFMACRO NAME="TITRE_DOCUMENT">  
+<!--[ ****************************************************************** ]-->
+<!--[ version 2.0                                                        ]-->
+<!--[ Affiche simplement le titre et le sous-titre 			]-->
+<!--[ du document et le rend cliquable.					]-->
+<!--[ A condition que documentcliquable soit vrai                        ]-->
+<!--[ ****************************************************************** ]-->
+	<IF COND="[#DOCUMENTCLIQUABLE]">
+		<a href="[#ID|makeurlwithid]">
+			[#TITRE|removenotes]	
+			<IF COND="[#SOUSTITRE]">
+				<br class="nobr" />
+			 	<span class="sousTitre">
+			 		[#SOUSTITRE|removenotes]
+			 	</span>
+			</IF>
+		</a>	
+	<ELSE/>
+		[#TITRE|removenotes]	
+		<IF COND="[#SOUSTITRE]">
+			<br class="nobr" />
+			<span class="sousTitre">
+				[#SOUSTITRE|removenotes]
+			</span>
+		</IF>	
+	</IF>
+</DEFMACRO>
+
+<DEFFUNC NAME="LISTER_DOCUMENTS" REQUIRED="type, nb, order">
+	<LOOP NAME="getEntities" TABLE="textes" WHERE="type = '[#TYPE]'" ORDER="[#ORDER]" LIMIT="0, [#NB]">
+		<BEFORE><dl class="listArticles"></BEFORE>
+		<DO>
+			<dt class="auteur"><MACRO NAME="LISTER_AUTEURS" /></dt>
+			<dd>
+			<MACRO NAME="TITRE_DOCUMENT">
+			</dd>
+			<dd class="date">
+				<IF COND="[#DATEPUBLI|isadate]">
+					[#DATEPUBLI|humandate]
+				<ELSE />
+					[#MODIFICATIONDATE|formateddate('%Y-%m-%d')|humandate]
+				</IF>
+			</dd>
+		</DO>
+		<AFTER></dl></AFTER>
+	</LOOP>
+</DEFFUNC>
+
+<DEFMACRO NAME="LISTER_AUTEURS">
+	<LOOP NAME="listAuthors" TABLE="auteurs" WHERE="type='auteur'"  WHERE="iddocument='[#ID]'" ORDER="rank">
+		<DOFIRST>[#PRENOM] <span class="familyName">[#NOMFAMILLE]</span></DOFIRST>
+		<DO>, [#PRENOM] <span class="familyName">[#NOMFAMILLE]</span></DO>
+		<DOLAST> et 
+			 [#PRENOM] <span class="familyName">[#NOMFAMILLE]</span>
+		</DOLAST>
+	</LOOP>
+</DEFMACRO>
+
+<DEFMACRO NAME="AFFICHER_MENU">
+	
+	<LET VAR="idrec">0</LET>
+	<LOOP NAME="getAllPublis" TABLE="publications" WHERE="idparent = [#IDREC] AND type NOT LIKE 'rubriqueaplat'" ORDER="rank">
+		<BEFORE><ul class="publisMenu"></BEFORE>
+		<LET VAR="idrec">[#ID]</LET>
+		<li>
+			<a href="[#ID|makeurlwithid]">[#TITRE]</a>
+			<LOOP NAME="getAllPublis"></LOOP>
+		</li>
+		<AFTER></ul></AFTER>
+	</LOOP>
+	
+</DEFMACRO>	
+
+<DEFMACRO NAME="AFFICHER_INDEX">
+	
+	<ul class="typepersonne">
+	<LOOP NAME="persontypes" TABLE="persons, persontypes"  SELECT="DISTINCT persons.idtype, title, persontypes.rank" WHERE="persons.idtype = persontypes.id" ORDER="persontypes.rank">
+		<li>
+		<a href="[#IDTYPE|makeurlwithid]">[#TITLE]</a>
+		</li>
+	</LOOP>
+	</ul>
+	<ul class="typeentree">
+	<LOOP NAME="entrytypes" TABLE="entries, entrytypes" SELECT="DISTINCT entries.idtype, title, entrytypes.rank" WHERE="entries.idtype = entrytypes.id AND entrytypes.class != 'indexavances'" ORDER="entrytypes.rank">
+		<li>
+		<a href="[#IDTYPE|makeurlwithid]">[#TITLE]</a>
+		</li>
+	</LOOP>
+	</ul>
+
+</DEFMACRO>	
+
+<DEFMACRO NAME="PARU_DANS">
+	<LOOP NAME="publication_parente" TABLE="publications" WHERE="id='[#IDPARENT]'">
+		<DO>
+			<h2 class="publiParente">
+				<a href="[#ID|makeurlwithid]">
+					<IF COND="[#TITRE]">
+						[#TITRE]
+					<ELSE />
+						[#IDENTIFIER]
+					</IF>
+				</a>
+			</h2>
+		</DO>
+        </LOOP>
+</DEFMACRO>
+
+<DEFMACRO NAME="PARU_DANS_SIMPLE">
+        <LOOP NAME="paruDansSimple" TABLE="relations, entities" WHERE="id2 = '[#ID]' AND nature = 'P' AND id1 = entities.id" ORDER="degree DESC">
+		<DOFIRST><a href="[#ID|makeurlwithid]">[#G_TITLE]</a></DOFIRST>
+		<DO><a href="[#ID|makeurlwithid]">[#G_TITLE]</a>&nbsp;&gt;&nbsp;</DO>
+		<DOLAST><a href="[#ID|makeurlwithid]">[#G_TITLE]</a></DOLAST>
+	</LOOP>
+</DEFMACRO>
+
+<DEFMACRO NAME="PRESENTER_PUBLICATION">
+	<h2 class="publiParente">
+                <MACRO NAME="TITRE_PUBLICATION">
+		<span class="sousTitre">
+			<br class="nobr" /><MACRO NAME="SOUSTITRE_PUBLICATION">
+	 	</span>
+	</h2>
+	<IF COND="[#INTRODUCTION]">
+		<p class="extrait">
+			<MACRO NAME="INTRODUCTION_COMPLETE">
+		</p>
+	</IF>				
+</DEFMACRO>
+
+<DEFMACRO NAME="AFFICHER_LIGNE_DOCUMENT">
+	<MACRO NAME="LISTER_AUTEURS">
+	<MACRO NAME="TITRE_DOCUMENT">
+</DEFMACRO>
+
+<DEFMACRO NAME="ENTREESPERSONNES">
+<!--[ ****************************************************************** ]-->
+<!--[ Classement alphabétique des entrées                                ]-->
+<!--[ ****************************************************************** ]-->
+
+<div class="alphabet" id="tabAlpha">
+	<MACRO NAME="TABLE_ALPHABETIQUE">
+</div>
+	<dl id="alphabet">
+	<LOOP NAME="alphabet">
+		<dt>
+			<a href="#alpha" id="[#LETTRE]">
+				[#LETTRE]
+				&nbsp;
+			</a>
+		</dt>
+
+		<LOOP NAME="alpha" TABLE="auteurs" WHERE="type='[#TYPE.TYPE]'" WHERE="substring(sortkey,1,1)='[#LETTRE]'" ORDER="sortkey">
+			<dd>
+				<IF COND="[#STATUS] ge 1">
+					<a class="auteur" href="[#ID|makeurlwithid]">
+						[#PRENOM] <span class="smallcaps">[#NOMFAMILLE]</span>
+					</a>
+				<ELSE/>
+					[#PRENOM] <span class="smallcaps">[#NOMFAMILLE]</span>
+				</IF>
+	
+			</dd>
+		</LOOP>
+	</LOOP>
+	</dl>
+</DEFMACRO>
+
+<DEFMACRO NAME="ENTREESALPHABETIQUES">
+
+<div id="tabAlpha">
+	<MACRO NAME="TABLE_ALPHABETIQUE">
+</div>
+	<dl id="alphabet">
+	<LOOP NAME="alphabet">
+		<dt>
+			<a href="#inside" id="[#LETTRE]">
+				[#LETTRE]
+				&nbsp;
+			</a>
+		</dt>
+
+		<LOOP NAME="alpha" TABLE="entries" WHERE="type='[#TYPE.TYPE]' AND upper(substring(sortkey,1,1))='[#LETTRE]'" ORDER="[#TYPE.SORT]">
+			<dd>
+				<IF COND="[#STATUS] GE 1">
+					<a href="[#ID|makeurlwithid]">
+						[#G_NAME]
+					</a>
+				<ELSE/>
+					[#G_NAME]
+				</IF>
+			</dd>
+		</LOOP>
+	</LOOP>
+	</dl>
+</DEFMACRO>
+
+<DEFMACRO NAME="ENTREESRECURSIF">
+
+	<LET VAR="IDREC">0</LET>
+	<LOOP NAME="entries" TABLE="entries" WHERE="type='[#TYPE.TYPE]' AND idparent='[#IDREC]'" ORDER="[#TYPE.SORT]">
+	<BEFORE><ul></BEFORE>
+		<DO>
+			<li class="afficherdocument">
+				<IF COND="[#STATUS] GE 1">
+					<a class="auteur" href="[#ID|makeurlwithid]">
+						[#G_NAME]
+					</a>
+				<ELSE/>
+					[#G_NAME]
+				</IF>
+			<LET VAR="IDREC">[#ID]</LET>
+			<LOOP NAME="entries"></LOOP>
+			</li>
+			
+		</DO>
+	<AFTER></ul></AFTER>
+	</LOOP>
+</DEFMACRO>
+
+<DEFMACRO NAME="INFOS_DOCUMENT">		
+	<dt class="auteur"><MACRO NAME="LISTER_AUTEURS" /></dt>
+	<dd><MACRO NAME="TITRE_DOCUMENT" /></dd>
+	<dd class="paruDans"><MACRO NAME="PARU_DANS_SIMPLE" /></dd>
+</DEFMACRO>
+
+<DEFMACRO NAME="CITATION">
+<!--[ ****************************************************************** ]-->
+<!--[ version 2.0                                                        ]-->
+<!--[ Affiche notice biblio du doc en cours                              ]-->
+<!--[ ****************************************************************** ]-->
+	<MACRO NAME="LISTER_AUTEURS">, &laquo;[#TITRE]&raquo;, <em><MACRO NAME="NOM_SITE"></em> [En ligne], 
+	<LOOP NAME="paru_dans_simple_citation" TABLE="relations, entities" WHERE="id2='[#ID]' AND id = id1">
+                [#G_TITLE], 
+	</LOOP>
+	mis à jour le : [#MODIFICATIONDATE|formateddate('%d/%m/%Y')], 
+	URL : [#CURRENTURL|dirname]/[#ID|makeurlwithid].
+</DEFMACRO>
+
+<DEFMACRO NAME="LIENS_SYNDICATION">
+	<ul>
+		<li>
+			<a href="index.[#EXTENSIONSCRIPTS]?page=backend&amp;format=rssdocuments">
+				Documents
+			</a>
+		</li>
+	</ul>
+</DEFMACRO>
+
+
+<!--[ ****************************************************************** ]-->
+<!--[ Pour les flux XML RSS Universels                                   ]-->
+<!--[ ajouté par Mickaël Sellapin 05/12/06                               ]-->
+<!--[ ****************************************************************** ]-->
+
+<DEFMACRO NAME="AFFICHER_PARENT">
+		
+		<LOOP NAME="afficheParent" TABLE="relations, entities" WHERE="id2 = '[#ID]' AND nature = 'P' AND id1 = entities.id" ORDER="degree DESC">
+		<category domain="[#CURRENTURL|dirname]/[#ID|makeurlwithid]">
+			[#G_TITLE|couper(50)]
+			<IF COND="[#G_TITLE|hasbeencut]">...</IF>
+		</category>
+		</LOOP>
+
+</DEFMACRO>
+
+<!--[ ]-->
+
+
+<DEFFUNC NAME="AFFICHER_ICONE_TYPE" REQUIRED="idtype, table">
+<LET VAR="table"><?php echo $GLOBALS['tp'];?>[#TABLE]</LET>
+	<LOOP NAME="getTypeIcon" SELECT="icon" TABLE="[#TABLE]" WHERE="id = '[#IDTYPE]'">
+		<IF COND="[#ICON]">
+			<img src="[#ICON]" alt="[#TYPE]" class="associatedIcon" />
+		<ELSE />
+			<LOOP SELECT="classes.icon AS classicon" NAME="getClassIcon" TABLE="[#TABLE], classes" WHERE="[#TABLE].class = classes.class AND [#TABLE].id = '[#IDTYPE]'">
+				<img src="[#CLASSICON]" alt="[#CLASS]"  class="associatedIcon" />
+			</LOOP>
+		</IF>
+	</LOOP>
+</DEFFUNC>
+
+<!--[ FIN Macros d'affichage ]-->
+
+<!--[ Navigation ]-->
+
+<DEFMACRO NAME="ARIANE">
+	<ul id="ariane">
+		<li><a href="index.[#EXTENSIONSCRIPTS]">accueil</a>&nbsp;&gt;</li>
+		<LOOP NAME="ariane" TABLE="relations, entities" WHERE="id2 = '[#ID]' AND nature = 'P' AND id1 = entities.id" ORDER="degree DESC">
+		<li><a href="[#ID|makeurlwithid]">
+			[#G_TITLE|couper(50)]
+			<IF COND="[#G_TITLE|hasbeencut]">...</IF>
+		</a>&nbsp;&gt;</li>
+		</LOOP>
+	</ul>
+</DEFMACRO>
+
+<DEFMACRO NAME="BLOC_NAVIGATION_DOCUMENTS">
+	<div id="bottomNav">
+		<div class="previous">
+			<LOOP NAME="previous" ID="[#ID]" THROUGH="regroupement">
+                     		<DO>
+					<a href="[#ID|makeurlwithid]">
+						Article Pr&eacute;c&eacute;dent
+					</a>	
+                      		</DO>
+				<ALTERNATIVE>
+				<a href="[#IDPARENT|makeurlwithid]">
+					Retour au sommaire
+				</a>	
+				</ALTERNATIVE>		
+                      </LOOP>
+		</div>
+		<div class="next">
+			<LOOP NAME="next" ID="[#ID]" THROUGH="regroupement">
+				<DO>
+					<a href="[#ID|makeurlwithid]">
+						Article suivant 
+					</a>
+                      		</DO>
+				<ALTERNATIVE>
+					<a href="[#IDPARENT|makeurlwithid]">
+						Retour au sommaire
+					</a>
+				</ALTERNATIVE>		
+                      </LOOP>
+		</div>
+	</div>
+</DEFMACRO>
+
+<DEFMACRO NAME="BLOC_NAVIGATION_PUBLICATIONS">
+	<div id="bottomNav">
+		<div class="previous">
+			<LOOP NAME="previous" ID="[#ID]">
+				<DO>
+					<IF COND="[#TYPE] EQ 'numero'">
+						<a href="[#ID|makeurlwithid]">
+							Num&eacute;ro pr&eacute;c&eacute;dent
+						</a>
+					<ELSE/>
+						<a href="[#ID|makeurlwithid]">
+							Rubrique pr&eacute;c&eacute;ente
+						</a>
+					</IF>
+				</DO>
+				<ALTERNATIVE>
+					<a href="index.[#EXTENSIONSCRIPTS]">
+						Retour &agrave; l'accueil
+					</a>
+				</ALTERNATIVE>
+        		</LOOP>
+		</div>
+		<div class="next">
+			<LOOP NAME="next" ID="[#ID]">
+				<DO>
+					<IF COND="[#TYPE] EQ 'numero'">
+						<a href="[#ID|makeurlwithid]">
+							Num&eacute;ro suivant
+						</a>
+					<ELSE/>
+						<a href="[#ID|makeurlwithid]">
+							Rubrique suivante
+						</a>
+                 			</IF>
+				</DO>
+				<ALTERNATIVE>
+					<a href="index.[#EXTENSIONSCRIPTS]">
+						Retour &agrave; l'accueil
+					</a>
+				</ALTERNATIVE>
+        		</LOOP>
+		</div>
+	</div>
+</DEFMACRO>
+
+<DEFMACRO NAME="TABLE_ALPHABETIQUE">
+	<a class="alphabet" href="#A">A</a> -
+	<a class="alphabet" href="#B">B</a> - 
+	<a class="alphabet" href="#C">C</a> - 
+	<a class="alphabet" href="#D">D</a> - 
+	<a class="alphabet" href="#E">E</a> - 
+	<a class="alphabet" href="#F">F</a> - 
+	<a class="alphabet" href="#G">G</a> - 
+	<a class="alphabet" href="#H">H</a> - 
+	<a class="alphabet" href="#I">I</a> - 
+	<a class="alphabet" href="#J">J</a> - 
+	<a class="alphabet" href="#K">K</a> - 
+	<a class="alphabet" href="#L">L</a> - 
+	<a class="alphabet" href="#M">M</a> - 
+	<a class="alphabet" href="#N">N</a> - 
+	<a class="alphabet" href="#O">O</a> - 
+	<a class="alphabet" href="#P">P</a> - 
+	<a class="alphabet" href="#Q">Q</a> - 
+	<a class="alphabet" href="#R">R</a> - 
+	<a class="alphabet" href="#S">S</a> - 
+	<a class="alphabet" href="#T">T</a> - 
+	<a class="alphabet" href="#U">U</a> - 
+	<a class="alphabet" href="#V">V</a> - 
+	<a class="alphabet" href="#W">W</a> - 
+	<a class="alphabet" href="#X">X</a> - 
+	<a class="alphabet" href="#Y">Y</a> - 
+	<a class="alphabet" href="#Z">Z</a>
+</DEFMACRO>
+
+<!--[ FIN Navigation ]-->
+
+<DEFMACRO NAME="TITRE_PUBLICATION">
+<!--[ ****************************************************************** ]-->
+<!--[ version 2.0                                                        ]-->
+<!--[ Affiche, s'il existe, le titre d'une publication.                  ]-->
+<!--[ ****************************************************************** ]-->
+	<IF COND="[#TITRE]">
+		[#TITRE]
+	<ELSE />
+		[#IDENTIFIER]
+	</IF>
+</DEFMACRO>
+
+<DEFMACRO NAME="SOUSTITRE_PUBLICATION">
+<!--[ ****************************************************************** ]-->
+<!--[ version 2.0                                                        ]-->
+<!--[ Affiche, s'il existe, le sous-titre d'une publication.             ]-->
+<!--[ ****************************************************************** ]-->
+	<IF COND="[#SOUSTITRE]">
+		 [#SOUSTITRE]
+	</IF>
+</DEFMACRO>
+
+
+
+
+<DEFMACRO NAME="PRESENTER_PUBLICATION_SANS_INTRODUCTION">
+<!--[ ****************************************************************** ]-->
+<!--[ version 2.0                                                        ]-->
+<!--[ Crï¿½ un bloc qui affiche le titre du num&eacute;ro ou de la rubrique,     ]-->
+<!--[ sauf s'il est vide, auquel cas il affiche le nom du site.          ]--> 
+<!--[ Cette macro fait appel aux macros suivantes :                      ]-->
+<!--[ <MACRO NAME="BOUTON_EDITER_PUBLICATION">                           ]-->
+<!--[ <MACRO NAME="TITRE_PUBLICATION">                                   ]-->
+<!--[ <MACRO NAME="SOUSTITRE_PUBLICATION">                               ]-->
+<!--[ ****************************************************************** ]-->
+	<h1 class="accueil">
+		 Sommaire du num&eacute;ro: <MACRO NAME="TITRE_PUBLICATION"> 
+		<span class="soustitresite">
+			<MACRO NAME="SOUSTITRE_PUBLICATION">		
+			<MACRO NAME="BOUTON_EDITER_PUBLICATION">
+
+	 	</span>
+	</h1>	
+</DEFMACRO>
+
+
+
+<DEFMACRO NAME="DATE_PUBLICATION_PARENTE">
+<!--[ ****************************************************************** ]-->
+<!--[ version 2.0                                                        ]-->
+<!--[ Affiche la date de publication parente d'un document, si elle      ]-->
+<!--[ existe sinon n'affiche rien.                                       ]-->
+<!--[ ****************************************************************** ]-->
+	<LOOP NAME="date_publication_parente" TABLE="publications" TABLE="relations" WHERE="id2='[#ID]' AND type!='regroupement' AND id=id1" ORDER="degres"> 
+		<DO>
+			<IF COND="[#DATE]!='0000-00-00'">
+				Texte publi&eacute; le : [(#DATE|humandate)]
+			</IF>
+		</DO>
+	</LOOP>
+</DEFMACRO>
+
+<DEFMACRO NAME="LANGUE_TITRE_BIBLIOGRAPHIE">
+<!--[ ****************************************************************** ]-->
+<!--[ version 2.0                                                        ]-->
+<!--[ Affiche le titre de la partie Bibliographie (ici "Bibliographie")  ]-->
+<!--[ dans la langue dï¿½inie pour le texte d'un document.                ]-->
+<!--[ ****************************************************************** ]-->
+	<IF COND="([#LANG] EQ 'fr') OR ([#LANG] EQ 'FR')">
+		<strong>Bibliographie</strong>
+	<ELSE/>
+		<IF COND="([#LANG] EQ 'en') OR ([#LANG] EQ 'EN')">
+			Bibliography
+		<ELSE/>
+			<IF COND="([#LANG] EQ 'it') OR ([#LANG] EQ 'IT')">
+				Bibliografia
+			<ELSE/>
+				<IF COND="([#LANG] EQ 'es') OR ([#LANG] EQ 'ES')">
+					Bibliografï¿½
+				<ELSE/>
+					<IF COND="([#LANG] EQ 'de') OR ([#LANG] EQ 'DE')">
+						Bibliographie
+					<ELSE/>
+						Bibliographie
+					</IF>
+				</IF>
+			</IF>
+		</IF>
+	</IF>
+</DEFMACRO>
+
+
+<DEFMACRO NAME="LISTER_DIRECTEURS">
+	
+	<LOOP NAME="directeur" TABLE="auteurs" WHERE="type='directeur de publication' AND identite=[#ID]">
+	<BEFORE><div class="directeur"></BEFORE>
+		<DOFIRST>Sous la direction de [#PRENOM] [#NOMFAMILLE]</DOFIRST>
+		<DO>, [#PRENOM]	[#NOMFAMILLE]</DO>
+		<DOLAST>
+			 et 
+			 [#PRENOM] [#NOMFAMILLE]
+		</DOLAST>
+	<AFTER></div></AFTER>		
+	</LOOP>
+</MACRO>
+
+
+
+<DEFMACRO NAME="DESCRIPTION_AUTEURS"> 
+<!--[ ****************************************************************** ]-->
+<!--[ version 2.0                                                        ]-->
+<!--[ Affiche la liste description des auteurs dans le document          ]-->
+<!--[ ****************************************************************** ]-->
+<LOOP NAME="description_auteur" TABLE="auteurs" WHERE="iddocument='[#ID]'" ORDER="rank"> 
+	<DO>
+		<IF COND="[#DESCRIPTION]">
+		 	<h4>
+				<strong>Quelques mots &agrave; propos de :&nbsp;</strong> 
+				<a class="auteur" href="personne.[#EXTENSIONSCRIPTS]?type=auteur&amp;id=[#ID]">
+					[#PRENOM]&nbsp;
+					<span class="smallcaps">[#NOMFAMILLE]</span>
+				</a>
+			</h4>
+		 	<div class="descriptionauteur">[#DESCRIPTION]</div>
+				
+		</IF>
+	</DO>
+	</LOOP>
+</DEFMACRO>
+
+
+<DEFMACRO NAME="AFFICHER_DOCUMENTS_ANNEXES">
+
+</DEFMACRO>
+
+<DEFMACRO NAME="ICONE_PUBLICATION">
+<!--[ ****************************************************************** ]-->
+<!--[ version 2.0                                                        ]-->
+<!--[ Affiche, s'il elle existe, l'icï¿½e de la publication.              ]-->
+<!--[ ****************************************************************** ]-->
+	<IF COND="[#ICONE]">
+		<a href="[#ID|makeurlwithid]">
+			<img src="[#ICONE]" align='left' name="[#IDENTIFIER]" border='0' alt="[#IDENTIFIER]" hspace="8" vspace="8">
+		</a>
+	</IF>
+</DEFMACRO>
+
+<DEFMACRO NAME="INTRODUCTION_COMPLETE">
+<!--[ ****************************************************************** ]-->
+<!--[ version 2.0                                                        ]-->
+<!--[ Affiche, si elle existe, l'introduction d'une publication, avec    ]-->
+<!--[ une icï¿½e et une lettrine.                                         ]-->
+<!--[ Cette macro fait appel ï¿½la macro suivante :                       ]-->
+<!--[ <MACRO NAME="ICONE_PUBLICATION">                                   ]-->
+<!--[ ****************************************************************** ]-->
+	<IF COND="[#TEXTE]">
+		<MACRO NAME="ICONE_PUBLICATION">
+		[(#TEXTE|lettrine)]
+	</IF>
+</DEFMACRO>
+
+<DEFMACRO NAME="INTRODUCTION_COURTE">
+<!--[ ****************************************************************** ]-->
+<!--[ version 2.0                                                        ]-->
+<!--[ Affiche avec une icï¿½e et une lettrine les 1500 premiers           ]-->
+<!--[ caractï¿½es de l'introduction d'une publication.                    ]-->
+<!--[ Cette macro fait appel ï¿½la macro suivante :                       ]-->
+<!--[ <MACRO NAME="ICONE_PUBLICATION">                                   ]-->
+<!--[ ****************************************************************** ]-->
+	<IF COND="[#TEXTE]">
+		<MACRO NAME="ICONE_PUBLICATION">
+		<!--[ affiche les 1500 premiers mots du texte ]-->
+		[(#TEXTE|lettrine|couper(1500))]
+		<a  href="[#ID|makeurlwithid]">
+			... lire la suite...
+		</a>
+	<ELSE/>
+		<a  href="[#ID|makeurlwithid]">
+			... lire ...
+		</a>
+	</IF>
+</DEFMACRO>
+
+<DEFMACRO NAME="INTRODUCTION_COURTE_SIMPLE">
+<!--[ ****************************************************************** ]-->
+<!--[ version 2.0                                                        ]-->
+<!--[ Affiche sans lettrine les 1500 premiers caractï¿½es de              ]-->
+<!--[ l'introduction d'une publication.                                  ]-->
+<!--[ ****************************************************************** ]-->
+	<IF COND="[#TEXTE]">
+		<br />
+		<!--[ affiche les 1500 premiers mots du texte ]-->
+		[(#TEXTE|couper(1500))]
+		<a class=" titre2" href="[#ID|makeurlwithid]">
+			... lire la suite...
+		</a>
+	<ELSE/>
+		<a class=" titre2" href="[#ID|makeurlwithid]">
+			... lire ...
+		</a>
+	</IF>
+</DEFMACRO>
+
+
+
+<DEFMACRO NAME="RECENSIONS">
+
+<!--[ ****************************************************************** ]-->
+<!--[ version 2.0                                                        ]-->
+<!--[ Affiche les recensions, ou les documents recensï¿½ s'il y en a      ]-->
+<!--[ ****************************************************************** ]-->
+
+
+<LOOP NAME="parent_compterendu" TABLE="textes" WHERE="id='[#IDPARENT]'">
+	<div class="titre3">
+						&gt;&gt; Voir le compte-rendu :
+					</div>
+<div class="afficherdocument">
+<a class="menu2" href="[#ID|makeurlwithid]">[#TITRE] </a>
+<br /><br />
+</div>
+</LOOP>	
+<!--[ 
+<LOOP NAME="parent_compterendu2" TABLE="documents" WHERE="idparent='[#ID]'">
+
+		<h4>
+						&gt;&gt; Voir l'article recensï¿½:
+					</h4>
+<div class="afficherdocument">
+<a href="[#ID|makeurlwithid]">[#NOTICEBIBLIO] </a>
+</div>
+<br /><br />
+</LOOP>
+]-->
+					
+				
+</DEFMACRO>
+
+<!--[ ****************************************************************** ]-->
+<!--[ Affichage des commentaires d'un article				 ]-->
+<!--[ ****************************************************************** ]-->
+<DEFMACRO NAME="COMMENTAIRES">
+<h4 class="section"><strong>Commentaires</strong></h4>
+<LOOP NAME="affichecommentaires" TABLE="textessimples" WHERE="idparent='[#ID]' AND type = 'commentaire'">
+<BEFORE>
+	<dl id="commentaires">
+</BEFORE>
+<DO>
+	<dt>
+		<a href="">[#COUNT]. </a>
+		[#TITRE|cuttext(100)], par <span class="auteur">
+		<IF COND="[#AUTEUR]">[#AUTEUR]<ELSE/>anonyme</IF></span>
+		 , le [#CREATIONDATE|formateddate("%A %d %B %Y")]
+	</dt>
+	<dd>
+		<blockquote><p>[#TEXTE]</p></blockquote>
+	</dd>
+</DO>
+<AFTER>
+	</dl>
+</AFTER>
+<ALTERNATIVE>
+	<p><em>Pas de commentaire</em></p>
+</ALTERNATIVE>
+</LOOP>
+<IF COND="[#STATUS] EQ 1">
+<LET VAR="idparent">[#ID]</LET>
+<LOOP NAME="test" TABLE="types,entitytypes_entitytypes" WHERE="type='commentaire' AND public=1 AND identitytype2='[#IDTYPE]'" LIMIT="1"> 
+<p>+<a href="index.[#EXTENSIONSCRIPTS]?idparent=[#IDPARENT]&amp;do=view&amp;idtype=[#ID]">ajouter un commentaire</a></p>
+</LOOP>
+</IF>
+
+</DEFMACRO>
+
+	
+		
+
+

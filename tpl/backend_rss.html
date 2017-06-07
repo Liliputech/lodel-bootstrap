@@ -1,0 +1,257 @@
+<!--[
+
+   LODEL - Logiciel d'Edition ELectronique.
+   Copyright (c) 2001-2002, Ghislain Picard, Marin Dacos   
+   Copyright (c) 2003-2004, Ghislain Picard, Marin Dacos, Luc Santeramo, Nicolas Nutten, Anne Gentil-Beccot
+   Copyright (c) 2006-2007, Bruno Cenou, Sophie Malafosse, Mickael Sellapin
+   
+   Home page: http://www.lodel.org
+   E-Mail: lodel@lodel.org
+                             All Rights Reserved
+      This program is free software; you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation; either version 2 of the License, or
+      (at your option) any later version.
+      This program is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      GNU General Public License for more details.
+      You should have received a copy of the GNU General Public License
+      along with this program; if not, write to the Free Software
+      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+]-->
+
+<USE MACROFILE="macros_site.html">
+<MACRO NAME="ENTETE_XML">
+
+<?php
+	$ident = (int)C::get('ident');
+	$tpl = C::get('tpl');
+	$query = C::get('query');
+	$type = C::get('type');
+
+	$context['ident'] = $ident;
+	$context['tpl'] = $tpl;
+	$context['query'] = $query;
+	$context['idtype'] = $type['id'];
+
+	setlocale (LC_ALL, 'en_US');
+?>
+
+<!--[   NE PAS OUBLIER DE RAJOUTER UNE CONFITION SUR ME STATUT ]-->
+
+<rss version="2.0">
+  <channel>
+
+    	<LOOP NAME="syndicationDocument" TABLE="entities, types" LIMIT="0,1" WHERE="entities.id='[#IDENT]' AND entities.idtype=types.id  AND entities.status GT 0">
+	<DO>
+	<IF COND="([#TPL] EQ 'sommaire') OR ([#TPL] EQ 'article')">
+
+    		<title>[#G_TITLE|textebrut|htmlspecialchars]</title>
+    		<link>[#CURRENTURL|dirname]/[#ID|makeurlwithid]</link>
+    		<description>
+			<IF COND="[#ID|get_dc_fields('description')]">
+			[#ID|get_dc_fields('description')|textebrut|htmlspecialchars]
+			</IF> 
+		</description>
+		
+		<MACRO NAME="AFFICHER_PARENT">
+
+		<LOOP NAME="afficherCommentaire" TABLE="relations, entities" WHERE="relations.id1='[#ID]' AND nature='P' AND relations.id2 = entities.id AND degree='1'">	
+			<LOOP NAME="afficherUrlCommentaire" TABLE="entities" WHERE="entities.id='[#ID]' AND entities.idtype='16'">
+				<comments>[#CURRENTURL|dirname]/[#ID|makeurlwithid]</comments>
+			</LOOP>
+		</LOOP>
+    		<language>fr</language>
+		<pubDate>[#CREATIONDATE|formateddate('%a, %d %b %Y %T %z')]</pubDate>
+		<lastBuildDate>[#MODIFICATIONDATE|formateddate('%a, %d %b %Y %T %z')]</lastBuildDate>
+      		<guid isPermaLink="true">[#CURRENTURL|dirname]/[#ID|makeurlwithid]</guid>
+    		<ttl>0</ttl>
+    
+		<IF COND="[#TPL] EQ 'sommaire'">
+    			<LOOP NAME="afficherFils" TABLE="relations, entities" WHERE="id1 = '[#ID]' AND nature = 'P' AND id2 = entities.id AND degree='1' AND entities.status GT 0" >
+				<item>	
+				<title>[#G_TITLE|textebrut|htmlspecialchars] </title>  
+				<link>[#CURRENTURL|dirname]/[#ID|makeurlwithid]</link>
+				<description>
+					<IF COND="[#ID|get_dc_fields('description')]">
+					[#ID|get_dc_fields('description')|textebrut|htmlspecialchars]
+					</IF>
+				</description>
+		
+				<pubDate>[#CREATIONDATE|formateddate('%a, %d %b %Y %T %z')]</pubDate>
+      				<guid isPermaLink="true">[#CURRENTURL|dirname]/[#ID|makeurlwithid]</guid>
+				</item>
+			</LOOP>
+		</IF>	
+	</IF>
+	</DO>	
+
+	<ALTERNATIVE>
+	<IF COND="(![#IDENT]) AND (![#QUERY])">
+ 
+	<!--[ pour la page d'accueil - affiche les dix derniers documents publiés ]-->
+
+		<LOOP NAME="titre_site" TABLE="sites" WHERE="name='[#SITE]' AND status GT 0" LIMIT="0,1">
+   			<title>[#TITLE]</title>
+  		</LOOP>
+    		<link>[#CURRENTURL|dirname]</link>
+    		<description><MACRO NAME="DESCRIPTION_SITE_POUR_METAS"></description>
+    		<language>fr</language>
+    		<LOOP NAME="dix_derniers_documents" TABLE="textes" LIMIT="0,10" ORDER="datepubli DESC">
+    			<DO>
+    			<item>
+      			<title>[#G_TITLE|textebrut|htmlspecialchars]</title>
+      			<link>[#CURRENTURL|dirname]/[#ID|makeurlwithid]</link>
+			<IF COND="[#RESUME|textebrut]">
+      				<description>[#RESUME|textebrut]</description>
+			<ELSE />
+				<description>[#TEXTE|textebrut|couper(1500)]</description>
+			</IF>
+      			<pubDate>[(#DATEPUBLI|formateddate('%a, %d %b %Y %T %z'))]</pubDate>
+			<guid isPermaLink="true">[#CURRENTURL|dirname]/[#ID|makeurlwithid]</guid>
+    			</item>
+    			</DO>
+    		</LOOP>
+	</IF>
+	</ALTERNATIVE>
+
+     	</LOOP>
+
+
+	<LOOP NAME="listeIndexAuteurs" TABLE="persontypes" WHERE="persontypes.id='[#IDENT]'">
+		<DO>
+
+		<title>Index [#TITLE]</title>
+		<link>[#CURRENTURL|dirname]/[#ID|makeurlwithid]</link>
+		<description>Les dernières entrées de l'index [#TITLE]</description>
+		<language>fr</language>
+    		<ttl>0</ttl>
+		
+		<LOOP NAME="entreesIndexAuteurs" TABLE="persons" WHERE="persons.idtype='[#ID]'" LIMIT="0,10" ORDER="upd DESC">
+			<item>
+			<title>[#G_FIRSTNAME|removenotes] [#G_FAMILYNAME|removenotes]</title>
+			<link>[#CURRENTURL|dirname]/[#ID|makeurlwithid]</link>
+			<guid isPermaLink="true">[#CURRENTURL|dirname]/[#ID|makeurlwithid]</guid>
+			<pubDate>[#UPD]</pubDate>
+			</item>
+		</LOOP>		
+		</DO>	
+	</LOOP>
+
+
+<!--[ pour l'index des auteurs ]-->
+
+	<LOOP NAME="indexAuteur" TABLE="persons, persontypes" WHERE="persons.id='[#IDENT]' AND persons.idtype = persontypes.id">
+		<DO>
+
+		<title>[#TITLE] : [#G_FIRSTNAME|removenotes] [#G_FAMILYNAME|removenotes]</title>
+    		<link>[#CURRENTURL|dirname]/[#ID|makeurlwithid]</link>
+		<description>Index des publications de [#TITLE] [#G_FIRSTNAME] [#G_FAMILYNAME]</description>
+		<language>fr</language>
+    		<ttl>0</ttl>
+
+		<LOOP NAME="listeAuteurArticles" TABLE="relations, entities" WHERE="relations.id2 = [#ID] AND relations.id1 = entities.id AND entities.status GT 0" LIMIT="0,10" ORDER="creationdate DESC">
+			<item>	
+			<title>[#G_TITLE|textebrut|htmlspecialchars]</title>  
+			<link>[#CURRENTURL|dirname]/[#ID|makeurlwithid]</link>
+			<description>
+				<IF COND="[#ID|get_dc_fields('description')]">
+					[#ID|get_dc_fields('description')|textebrut|htmlspecialchars]
+				<ELSE />
+					<!--[ à discuter de la description du flux ]-->
+				</IF>
+			</description>
+		
+			<pubDate>[#CREATIONDATE|formateddate('%a, %d %b %Y %T %z')]</pubDate>
+			<lastBuildDate>[#MODIFICATIONDATE|formateddate('%a, %d %b %Y %T %z')]</lastBuildDate>
+      			<guid isPermaLink="true">[#CURRENTURL|dirname]/[#ID|makeurlwithid]</guid>
+			</item>
+		</LOOP>
+		</DO>
+	</LOOP>
+  
+
+
+<!--[ pour la liste des 10 dernières entrées d'un index ]-->
+
+     	<LOOP NAME="listeIndexGeneral" TABLE="entrytypes" WHERE="entrytypes.id='[#IDENT]'">
+		<DO>
+
+		<title>[#TITLE]</title>
+		<link>[#CURRENTURL|dirname]/[#ID|makeurlwithid]</link>
+		<description>Les dernières entrées de [#TITLE]</description>
+		<language>fr</language>
+    		<ttl>0</ttl>
+		
+		<LOOP NAME="entreesIndexGeneral" TABLE="entries" WHERE="entries.idtype='[#ID]'" LIMIT="0,10" ORDER="upd DESC">
+			<item>
+			<title>[#G_NAME|removenotes]</title>
+			<link>[#CURRENTURL|dirname]/[#ID|makeurlwithid]</link>
+			<guid isPermaLink="true">[#CURRENTURL|dirname]/[#ID|makeurlwithid]</guid>
+			<pubDate>[#UPD]</pubDate>
+			</item>
+		</LOOP>		
+		</DO>
+     	</LOOP>
+
+
+<!--[ pour l'index de mot clÃ©s, keywords, palabras clave, gÃ©ographique, chronologique, thÃ©matique   ]-->
+
+	<LOOP NAME="indexGeneral" TABLE="entries" WHERE="entries.id='[#IDENT]'">
+		<DO>
+
+		<title>[#G_NAME]</title>
+    		<link>[#CURRENTURL|dirname]/[#ID|makeurlwithid]</link>
+		<description>Index de [#G_NAME]</description>
+		<language>fr</language>
+    		<ttl>0</ttl>
+
+		<LOOP NAME="indexEntry" TABLE="relations, entities" WHERE="relations.id2 = [#ID] AND relations.id1 = entities.id AND entities.status GT 0" LIMIT="0,10" ORDER="entities.modificationdate DESC">
+			<item>	
+			<title>[#G_TITLE|textebrut|htmlspecialchars]</title>  
+			<link>[#CURRENTURL|dirname]/[#ID|makeurlwithid]</link>
+			<description>
+				<IF COND="[#ID|get_dc_fields('description')]">
+				[#ID|get_dc_fields('description')|textebrut|htmlspecialchars]
+				</IF>
+			</description>
+		
+			<pubDate>[#CREATIONDATE|formateddate('%a, %d %b %Y %T %z')]</pubDate>
+			<lastBuildDate>[#MODIFICATIONDATE|formateddate('%a, %d %b %Y %T %z')]</lastBuildDate>
+      			<guid isPermaLink="true">[#CURRENTURL|dirname]/[#ID|makeurlwithid]</guid>
+			</item>
+		</LOOP>
+		</DO>
+	</LOOP>
+
+	<!--[   pour un individu    ]-->
+	<LOOP NAME="individu" TABLE="individus" WHERE="individus.identity='[#IDENT]'">
+		<DO>
+
+		<title>[#PRENOM] [#NOM]</title>
+    		<link>[#CURRENTURL|dirname]/[#ID|makeurlwithid]</link>
+		<description>[#ACCROCHE]</description>
+		<language>fr</language>
+    		<ttl>0</ttl>
+
+		<LOOP NAME="indexEntry" TABLE="relations, entities" WHERE="relations.id2 = [#ID] AND relations.id1 = entities.id AND entities.status GT 0" LIMIT="0,10" ORDER="entities.modificationdate DESC">
+			<item>	
+			<title>[#G_TITLE|textebrut|htmlspecialchars]</title>  
+			<link>[#CURRENTURL|dirname]/[#ID|makeurlwithid]</link>
+			<description>
+				<IF COND="[#ID|get_dc_fields('description')]">
+				[#ID|get_dc_fields('description')|textebrut|htmlspecialchars]
+				</IF>
+			</description>
+		
+			<pubDate>[#CREATIONDATE|formateddate('%a, %d %b %Y %T %z')]</pubDate>
+			<lastBuildDate>[#MODIFICATIONDATE|formateddate('%a, %d %b %Y %T %z')]</lastBuildDate>
+      			<guid isPermaLink="true">[#CURRENTURL|dirname]/[#ID|makeurlwithid]</guid>
+			</item>
+		</LOOP>
+		</DO>
+	</LOOP>
+
+  </channel>
+</rss>

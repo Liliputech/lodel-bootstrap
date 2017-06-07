@@ -1,0 +1,106 @@
+<CONTENT VERSION="1.0" LANG="fr" CHARSET="iso-8859-1"/>
+<!--[
+
+   LODEL - Logiciel d'Edition ELectronique.
+   Copyright (c) 2001-2002, Ghislain Picard, Marin Dacos   
+   Copyright (c) 2003-2004, Ghislain Picard, Marin Dacos, Luc Santeramo, Nicolas Nutten, Anne Gentil-Beccot
+ 	
+ 	Home page: http://www.lodel.org
+   E-Mail: lodel@lodel.org
+                             All Rights Reserved
+      This program is free software; you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation; either version 2 of the License, or
+      (at your option) any later version.
+      This program is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      GNU General Public License for more details.
+      You should have received a copy of the GNU General Public License
+      along with this program; if not, write to the Free Software
+      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.]-->
+
+
+<USE MACROFILE="macros_site.html" />
+
+
+<!--[ ****************************************************************** ]-->
+<!--[ Cette page affiche les documents de type article.                  ]-->
+<!--[ Auteur : Marin Dacos, Anne Gentil-Beccot. Mai 2003.                ]-->
+<!--[ Dernière modification majeure en mai 2003.                         ]-->
+<!--[ ****************************************************************** ]-->
+
+
+<MACRO NAME="OUVRIR_HTML" />
+<MACRO NAME="DEFINIR_CHARSET" />
+<title>[#PRENOM|textebrut] [#NOM|textebrut]</title>
+<MACRO NAME="METADONNEES" />
+<MACRO NAME="INSERER_FEUILLE_DE_STYLES" />
+<MACRO NAME="PRELUDE" />
+
+
+<MACRO NAME="PARU_DANS"> 
+
+	<div id="enteteDocument">				               
+		<!--[<MACRO NAME="LISTER_AUTEURS" />]-->
+		<h3>
+			[#PRENOM] <span class="familyName">[#NOM]</span>
+		</h3>
+		<div class="type">
+		<LOOP NAME="type_du_document" TABLE="types" WHERE="id='[#IDTYPE]'">
+			[#TITLE]
+		</LOOP>
+		</div>
+	</div>
+			
+
+	<IF COND="[#DATEPUBLI] le today()">
+		<IF COND="[#PHOTOGRAPHIE]">
+			<img src="[#PHOTOGRAPHIE]" alt="[#IDENTIFIER]"  class="icone" />
+		</IF>
+
+		<IF COND="[#ACCROCHE]">
+			<div id="texte">
+				[#ACCROCHE]
+			</div>
+		</IF>
+		<br class="spacer" />
+		<IF COND="[#DESCRIPTION]">
+			<div id="personDesc">
+				[#DESCRIPTION]
+			</div>
+		</IF>
+
+		<dl id="personInfo">
+			<IF COND="[#EMAIL]">
+				<dt>Email : </dt>
+				<dd>[#EMAIL]</dd>
+			</IF>
+			<IF COND="[#SITEWEB]">
+				<dt>Site web : </dt>
+				<dd><a href="[#SITEWEB]">[#SITEWEB]</a></dd>
+			</IF>
+			<IF COND="[#ADRESSE]">
+				<dt>Adresse : </dt>
+				<dd>[#ADRESSE]</dd>
+			</IF>
+			<IF COND="[#TELEPHONE]">
+				<dt>Téléphone : </dt>
+				<dd>[#TELEPHONE]</dd>
+			</IF>
+		</dl>
+	<!--[ Si le texte n'est pas encore autorisé à être publié ]-->
+	<ELSE/>
+		<div id="annexes">
+		<h4>Ce document sera publié en ligne en texte intégral le [(#DATEPUBLI|humandate)].</h4>
+		</div><!-- fin annexes -->
+	</IF>
+					
+		
+
+		
+					
+<MACRO NAME="BLOC_NAVIGATION_DOCUMENTS">
+<MACRO NAME="CONCLUSION" />
+<MACRO NAME="FERMER_HTML" />  
+

@@ -1,0 +1,134 @@
+<USE MACROFILE="macros_0.4.html">
+<USE MACROFILE="macros_admin.html">
+<USE MACROFILE="macros_affichage.html">
+<USE MACROFILE="macros_technique.html">
+<USE MACROFILE="macros_images.html">
+<USE MACROFILE="macros_navigation.html">
+<USE MACROFILE="macros_presentation.html">
+<USE MACROFILE="macros_revue.html">
+
+
+<!--[ ****************************************************************** ]-->
+<!--[ Cette page affiche les documents de type article.                  ]-->
+<!--[ Auteur : Marin Dacos. Août 2002.                                   ]-->
+<!--[ Dernière modification majeure en septembre 2002.                   ]-->
+<!--[ ****************************************************************** ]-->
+
+<MACRO NAME="OUVRIR_HTML">
+<title>[(#TITRE|textebrut)]</title>
+<MACRO NAME="METADONNEES">
+<MACRO NAME="INSERER_STYLE">
+<MACRO NAME="JS_JUMPMENU"> 
+
+<MACRO NAME="OUVRIR_TABLE_PRINCIPALE">
+	<!--[ Affiche la barre verticale de navigation ]-->
+	<MACRO NAME="INSERER_BARRE_NAVIGATION_VERTICALE">
+		<td valign="top">
+			<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center" valign="TOP">
+				<tr>
+					<td valign="top">
+					<br />
+						<table width="70%" border="0" align="right">
+							<tr>
+								<td align="right" class="navigation">
+									<MACRO NAME="BOUTON_SIGNALER">
+								</td>
+							</tr>
+							<tr>
+								<td align="right" class="auteur">
+									<MACRO NAME="BOUTON_EDITER_DOCUMENT">&nbsp;								
+								</td>
+							</tr>
+							<tr>
+								<td class="titre">
+									[#TITRE]
+									<br />
+									<br />
+								</td>
+							</tr>
+							<IF COND="[#DATEPUBLI] le today()">
+							<tr>
+								<td class="integral">
+								Texte intégral
+								</td>
+							</tr>
+							</IF>
+								<td align="right">
+									<MACRO NAME="BOUTON_IMPRIMER">
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				
+			</table>
+
+<!--[ ----------------------------------------------------------------------- ]-->
+<!--[ Cette partie ne s'affiche que si le texte est autorisé à la publication ]-->
+<!--[ ----------------------------------------------------------------------- ]-->
+
+			<IF COND="[#DATEPUBLI] le today()">
+			
+			<!--[ Texte ------------------------   ]-->
+			<table width="90%" border="0" cellspacing="0" cellpadding="0" align="CENTER">
+				<tr> 
+					<td class="titre" valign="top"> 
+
+						<!--[ Texte. Si il existe -]-->
+						<IF COND="[#TEXTE]">
+				<tr> 
+					<td colspan="3" class="partie" valign="top">
+							<br /><br />
+					</td>
+				</tr>
+				<tr> 
+					<td class="texte" valign="top">
+						[(#TEXTE|tocable|tocss|lettrine)]
+						<br />
+					</td>
+				</tr>
+				<tr>
+					<td align="right" class="auteur_recension">
+						<MACRO NAME="LISTER_AUTEURS">
+					</td>
+				</tr>
+						</IF>
+						
+						<!--[ Notes de bas de page. Si elles existent -]-->
+						<IF COND="[#NOTEBASPAGE]">
+							<tr> 
+								<td class="partie" valign="top">
+									<br />
+									<strong>
+										Notes
+									</strong><br /><br />
+								</td>
+							</tr>
+							<tr>
+								<td class="notes" valign="top">
+									[#NOTEBASPAGE]
+									<br />
+								</td>
+							</tr>
+						</IF>
+					</td>
+				</tr>
+			</table>
+			
+			<!--[ Si le texte n'est pas encore autorisé à être publié ]-->
+			<ELSE/>
+				<br />
+				<br />
+				<div align="center">
+					Ce document sera publié en ligne en texte intégral le [#DATEPUBLI].
+				</div>
+				<br />
+				<br />
+			</IF>
+		<br />
+			<MACRO NAME="REVUES_ORG">
+		</td>
+		<MACRO NAME="TRACER_LIGNE_VERTICALE">
+<MACRO NAME="FERMER_TABLE_PRINCIPALE">
+<MACRO NAME="FERMER_HTML">  
+

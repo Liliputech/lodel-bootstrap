@@ -1,0 +1,547 @@
+body{
+	font-size: 80%;
+	text-align: center;
+	font-family: "Bitstream vera serif", Georgia, serif;
+	background: #eee;
+	margin: 0;
+	padding: 0;
+}
+
+a{
+	color: #0075ab;
+	text-decoration: none;
+}
+
+a:hover{
+	border-bottom: 1px dotted;
+}
+
+p{
+	line-height: 150%;
+	text-align: justify;
+}
+
+h1, h2, h3, h4, h5, h6, p, form, fieldset, img, blockquote{
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+li{
+	line-height: 150%;
+	margin-bottom: 1ex;
+}
+
+dt{
+	font-weight: bold;
+	margin-bottom: 1ex;
+}
+
+.familyName{
+	font-variant: small-caps;
+}
+
+.spacer{
+	display: block;
+	height: 2em;
+	clear: both;
+}
+
+h2.publiParente, h3, h4{
+	margin-bottom: 2ex;
+}
+
+h2.publiParente{
+	padding-top: 1em;
+}
+
+h3.accueil{
+	margin-top: 3ex;
+	color: #e18600;
+}
+
+a.footnotecall, a.FootnoteSymbol{
+	font-family: "Bitstream vera sans", verdana, sans-serif;
+	font-weight: bold;
+}
+
+a.footnotecall{
+	font-size: 90%;
+	margin-left: .3em;
+	font-style: normal;
+}
+
+a.footnotecall:before, a.FootnoteSymbol:before{
+	content: "[";
+}
+
+a.footnotecall:after, a.FootnoteSymbol:after{
+	content: "]";
+}
+
+a.indexBack{
+	display: block;
+	font-size: 90%;
+	font-family: "Bitstream vera sans", verdana, sans-serif;
+	font-weight: bold;
+	text-align: right;
+	margin-top: 3em;
+	border: 0;
+}
+
+br.nobr{
+	display: none;
+}
+
+span.sousTitre{
+	display: block;
+/* 	margin-top: -.5ex; */
+	font-size: 90%;
+	font-weight: normal;
+	font-style: italic;
+}
+
+dl.listArticles dt{
+	margin: 2ex 0 0 0;
+}
+
+dl.listArticles dd{
+	margin: 0 0 0 0;
+	padding: 0;
+}
+
+dl.listArticles dd.date{
+	font-size: 90%;
+	font-style: italic;
+}
+
+dl.listArticles dd.paruDans{
+	font-family: "Bitstream vera sans", verdana, sans-serif;
+	font-size: 90%;
+	color: #666;
+}
+
+dl.listArticles dd.paruDans a{
+	color: #666;
+}
+
+div.notes p{
+	margin-bottom: 1.5ex;
+	text-align: justify;
+}
+
+img.icone{
+	display: block;
+	float: left;
+	max-width: 200px;
+	border: 1px solid #aaa;
+	margin-right: 1em;
+}
+
+#main{
+	position: relative;
+	margin: auto;
+	width: 700px;
+	text-align: left;
+}
+
+#accessible, #footer{
+	text-align: center;
+	color: #e5e8e3;
+	padding: .5ex 0;
+	font-family: "Bitstream vera sans", verdana, sans-serif;
+}
+
+#accessible a, #footer a, #ariane{
+	color: #aaa;
+}
+
+#cartouche{
+	color: #fff;
+	background: #0075ab;
+	height: 80px;
+	padding: 1em;
+	margin-bottom: 10px;
+}
+
+#cartouche span.sousTitre{
+	font-weight: bold;
+	font-size: 70%;
+	margin-top: 0;
+}
+
+#cartouche a{
+	color: #fff;
+	text-decoration: none;
+}
+
+#ariane{
+	font-family: "Bitstream vera sans", verdana, sans-serif;
+	font-size: 90%;
+	padding: -.3ex 0 3ex 0;
+}
+
+#ariane, #ariane li{
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#ariane li{
+	display: inline;
+}
+
+#menu, #inside, #content{
+	background: #fff;
+}
+
+
+#menu{
+	font-family: "Bitstream vera sans", verdana, sans-serif;
+	position: absolute;
+	top: 164px;
+	font-size: 90%;
+	padding: 1.3em 1em;
+	width: 162px;
+	height: 490px;
+	color: #e18600;
+}
+
+/* HACK */
+
+*>#menu{
+	height: auto;
+	min-height: 490px;
+}
+
+#menu ul, #menu ul li{
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	line-height: 100%;
+}
+
+#menu ul li{
+	margin-bottom: 1ex;
+}
+
+#menu ul{
+	margin: 2ex 0;
+}
+
+#menu ul li li{
+	margin-left: 1em;
+}
+
+#menu h3{
+	margin: 2ex 0 1ex 0;
+}
+
+#recherche{
+	padding: 2ex 0;
+}
+
+#recherche input, #recherche select{
+	font-size: 90%;
+}
+
+#recherche select{
+	width: 150px;
+}
+
+#recherche label{
+	display: block;
+}
+
+#advanced_search{
+	margin-top: 2ex;
+	padding-top: 1ex;
+}
+
+#advanced_search label{
+	font-size: 90%;
+}
+
+#rss{
+	display: block;
+	text-align: center;
+	margin: 2ex 0 0 0;
+}
+
+#inside{
+	margin: 0 0 0 185px;
+	border-left: 10px solid #eee; 
+	padding: 1em 2em 2em 2em;
+	height: 510px;
+}
+
+/* HACK */
+
+*>#inside{
+	height: auto;
+	min-height: 510px;
+}
+
+#footer{
+	height: auto;
+	font-size: 90%;
+	border-top: 1px solid #eee;
+	z-index: 1;
+}
+
+#inside.article h4{
+	margin: 3ex 0 2ex 0;
+	color: #e18600;
+}
+
+#enteteDocument{
+	margin: 30px 0;
+}
+
+#enteteDocument h3{
+	margin: 0 0 2ex 0;
+}
+
+#enteteDocument h3 span.sousTitre{
+	display: block;
+	font-size: 80%;
+	font-weight: normal;
+}
+
+
+#resume{
+	font-size: 90%;
+	text-align: justify;
+	line-height: 150%;
+}
+
+#toc{
+	color: #e18600;
+}
+
+#toc .toc_section1, div.type{
+	font-weight: bold;
+}
+
+#menu a.map:before, #toc .toc_section1:before, div.type:before{
+	content: "\2794";
+	font-weight: normal;
+}
+
+#toc .toc_section2:before, #menu ul li li:before{
+	content: "\2219";
+	font-size: 200%;
+	vertical-align: -15%;
+}
+
+#menu ul li li:before{
+	vertical-align: -30%;
+}
+
+#toc .toc_section2{
+	margin-left: 1.5em;
+}
+
+#toc .toc_section3{
+	margin-left: 3em;
+}
+
+#toc .toc_section4{
+	margin-left: 4em;
+}
+
+#toc .toc_section5{
+	margin-left: 5em;
+}
+
+#toc .toc_section6{
+	margin-left: 6em;
+}
+
+#texte{
+	position: relative;
+}
+
+#personDesc, #personInfo{
+	clear: both;
+	margin-top: 3em;
+}
+
+#personInfo dd{
+	margin: 0;
+}
+
+#personInfo dt{
+	margin: 2ex 0 1ex 0;
+}
+
+#texte p.texte, #bibliographie p{
+	line-height: 150%;
+	text-align: justify;
+	margin: 1ex 0;
+}
+
+#texte p.citation{
+	line-height: 150%;
+	text-align: justify;
+	margin: 2ex 0 2ex 4em;
+	font-style: italic; 
+	margin-bottom: 2ex;
+}
+
+#texte h1, #bibliographie h1{
+	font-size: 130%;
+	margin: 4ex 0 2ex 0;
+}
+
+#texte h2, #bibliographie h2{
+	font-size: 120%;
+	margin: 3ex 0 2ex 0;
+}
+
+#texte h3, #bibliographie h3{
+	font-size: 110%;
+	margin: 3ex 0 2ex 0;
+}
+
+#texte h4, #bibliographie h4{
+	font-size: 100%;
+	margin: 2ex 0 1ex 0;
+}
+
+#texte span.paranumber{
+	display: block;
+	font-size: 70%;
+	color: #aaa;
+	left: -2em;
+	text-align: right;
+	position: absolute;
+	font-family: "Bitstream vera sans", verdana, sans-serif;
+}
+
+#texte table{
+	border-collapse: collapse;
+	width: 100%;
+}
+
+#texte table td{
+	border: 1px solid #aaa;
+	padding: 1ex 1em;
+	vertical-align: top;
+}
+
+#texte table td p.texte{
+	margin: 0;
+	text-align: left;
+}
+
+#flux{
+	clear: both;
+	margin-top: 4em;
+}
+
+#flux ul{
+	font-size: 90%;
+	font-family: "Bitstream vera sans", verdana, sans-serif;
+}
+
+#flux ul, #flux ul li{
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+#flux ul li{
+	margin-bottom: 2em;
+}
+
+#flux ul a{
+	font-weight: bold;
+}
+
+#flux ul p{
+	margin-top: 1em;
+}
+
+#annexes{
+	font-size: 90%;
+}
+
+#annexes h4{
+	font-size: 110%;
+}
+
+#bibliographie p{
+	text-align: left;
+}
+
+#map{
+	margin-top: 4em;
+}
+
+#map ul, #map ul li{
+	list-style: none;
+	margin: 2ex 0;
+	padding-left: 0;
+}
+
+#map ul li{
+	font-weight: bold;
+	clear: both;
+	padding-left: 2.5em;
+}
+
+#map ul li li{
+	font-weight: normal;
+	margin-left: .5em;
+}
+
+#map ul li img{
+	display: block;
+	position: absolute;
+	margin-left: -2.5em;
+}
+
+#map strong.auteurs{
+	display: block;
+	font-size: 90%;
+}
+
+#tabAlpha{
+	font-size: 90%;
+	font-family: "Bitstream vera sans", verdana, sans-serif;
+	color: #aaa;
+}
+
+#alphabet dt{
+	font-size: 200%;
+	margin: 1.5em 0 .5em 0;
+}
+
+#alphabet dd{
+	margin: 0 0 1ex 0;
+	padding-left: 0;
+}
+
+#bottomNav{
+	clear: both;
+	position: relative;
+	padding: 4em 0 2em 0;
+}
+
+#bottomNav .previous, #bottomNav .next{
+	position: absolute;
+	font-family: "Bitstream vera sans", verdana, sans-serif;
+	font-size: 90%;
+}
+
+#bottomNav .previous{
+	left: 0;
+}
+
+#bottomNav .next{
+	right: 0;
+}
+
+
+

@@ -1,0 +1,45 @@
+/**
+ * @name MACRO_ENTETE_RSS
+ * @used backend_rss*
+ * @description 
+ */
+<DEFMACRO NAME="ENTETE_RSS">
+	<ESCAPE>
+	<?php
+	header('Content-type: application/xml; charset='.C::get('charset'));
+	echo '<?xml version="1.0" encoding="'.C::get('charset').'"?>'."\n";
+	?>
+	</ESCAPE>
+	<?php $context['limit'] = ($limit = (int)C::get('limit')) ? $limit : 10; ?>
+	<LET VAR="siteurl"><IF COND="'/' EQ [#OPTIONS.METADONNEESSITE.URLDUSITE|substr(-1)]">[#OPTIONS.METADONNEESSITE.URLDUSITE|substr(0, -1)]<ELSE/>[#OPTIONS.METADONNEESSITE.URLDUSITE]</IF></LET>
+	<LET VAR="sitelocale"><IF COND="[#SITELANG|strlen] SEQ 2">[#SITELANG]_<IF COND="[#SITELANG] EQ 'en'">US<ELSE/>[#SITELANG|strtoupper]</IF><ELSE/>[#SITELANG]</IF>.UTF8</LET>
+	<LET VAR="contactauteur"><USE TEMPLATEFILE="contact_revue" /></LET>
+</DEFMACRO>
+
+/**
+ * @name MACRO_META_CHANNEL
+ * @used backend_rss*
+ * @description 
+ */
+<DEFMACRO NAME="META_CHANNEL">
+	<title>[#OPTIONS.METADONNEESSITE.TITRESITE|textebrut|cleanBadChars]</title>
+	<link>[#SITEURL]</link>
+	<description>[#OPTIONS.METADONNEESSITE.DESCRIPTIONSITE|textebrut|cleanBadChars]</description>
+	<generator>Lodel [#VERSION]</generator>
+	<!--[<language>fr</language>]-->
+	<!--[<language>[#OPTIONS.METADONNEESSITE.LANGUEPRINCIPALE]</language>]-->
+</DEFMACRO>
+
+/**
+ * @name MACRO_META_ITEM
+ * @used backend_rss*
+ * @description 
+ */
+<DEFMACRO NAME="META_ITEM">
+	<link>[#SITEURL]/[#ID|makeurlwithid]</link>
+	<author>[#CONTACTAUTEUR] [#AUTHORS|trim]</author>
+	<?php setlocale (LC_ALL, 'en_US.UTF8');?>
+	<pubDate>[#DATEPUBLI|formateddate('%a, %d %b %Y %T %z')]</pubDate>
+	<?php setlocale (LC_ALL, $context['sitelocale']);?>
+	<guid isPermaLink="true">[#SITEURL]/[#ID|makeurlwithid]</guid>
+</DEFMACRO>

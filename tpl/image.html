@@ -1,0 +1,102 @@
+<CONTENT VERSION="1.0" LANG="fr" CHARSET="iso-8859-1"/>
+<!--[
+
+   LODEL - Logiciel d'Edition ELectronique.
+   Copyright (c) 2001-2002, Ghislain Picard, Marin Dacos   
+   Copyright (c) 2003-2004, Ghislain Picard, Marin Dacos, Luc Santeramo, Nicolas Nutten, Anne Gentil-Beccot
+   
+   Home page: http://www.lodel.org
+   E-Mail: lodel@lodel.org
+                             All Rights Reserved
+      This program is free software; you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation; either version 2 of the License, or
+      (at your option) any later version.
+      This program is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      GNU General Public License for more details.
+      You should have received a copy of the GNU General Public License
+      along with this program; if not, write to the Free Software
+      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.]-->
+
+
+<USE MACROFILE="macros_site.html" />
+
+<MACRO NAME="OUVRIR_HTML" />
+<MACRO NAME="DEFINIR_CHARSET" />
+<title><MACRO NAME="NOM_SITE_METAS"></title>
+<MACRO NAME="METADONNEES_POUR_PAGE_ACCUEIL" />
+<MACRO NAME="INSERER_FEUILLE_DE_STYLES" />
+<MACRO NAME="PRELUDE" />
+	<div>
+		<dl>
+			<!--[ Image ]-->
+			<LET VAR="image">
+				<IF COND="[#CLASS] EQ 'liens'">
+					[#CAPTUREDECRAN|vignette(480)]
+				<ELSEIF COND="[#TYPE] LIKE /image/ AND [#DOCUMENT]" />
+					[#DOCUMENT|vignette(480)]
+				<ELSEIF COND="[#VIGNETTE]" />
+					[#VIGNETTE|vignette(480)]
+				</IF>
+			</LET>
+			<IF COND="[#IMAGE]">
+				<dt>
+					<img alt="[#TITRE|textebrut]" src="[#IMAGE]" />
+				</dt>
+			</IF>
+			
+			<!--[ Légende ]-->
+			<IF COND="[#LEGENDE]">
+				<dd>[#LEGENDE]</dd>
+			</IF>
+			
+			<!--[ Description ]-->
+			<IF COND="[#DESCRIPTION]">
+				<dt>Description</dt>
+				<dd>[#DESCRIPTION]</dd>
+			</IF>
+			
+			<!--[ Auteur(s) ]-->
+			<LOOP NAME="fileAuthor" TABLE="auteurs" WHERE="type = 'auteur' AND iddocument = '[#ID]'" ORDER="rank">
+				<BEFORE>
+					<dt><IF COND="[#NBRESULTS] GT 1">[@AUTEURS]<ELSE/>[@AUTEUR]</IF></dt>
+					<dd>
+				</BEFORE>
+				<DO>
+					[#PRENOM] [#NOMFAMILLE]
+					<IF COND="[#AFFILIATION]">([#AFFILIATION])</IF>
+				</DO>
+				<AFTER>
+					</dd>
+				</AFTER>
+			</LOOP>
+			
+			<!--[ Crédits ]-->
+			<IF COND="[#CREDITS]">
+				<dt>[@CREDITS]</dt>
+				<dd>[#CREDITS]</dd>
+			</IF>
+			
+			<!--[ Licence ]-->
+			<LOOP NAME="fileLicense" TABLE="indexavances" WHERE="type = 'licence' AND iddocument = '[#ID]'" ORDER="rank" LIMIT="1">
+				<dt>[@LICENCE]</dt>
+				<dd>
+					<IF COND="[#URL|htmlspecialchars]">
+						<a href="[#URL|htmlspecialchars]">[#NOM]</a>
+					<ELSE/>
+						[#NOM]
+					</IF>
+				</dd>
+			</LOOP>
+			
+			<!--[ Fichier ]-->
+			<dt>[@FICHIER_ORIGINAL]</dt>
+			<dd>
+				<a href="[#ID|makeurlwithfile]">[#DOCUMENT|basename]</a> ([#DOCUMENT|getFileMime] &#8211; [#DOCUMENT|nicefilesize])
+			</dd>
+		</dl>
+	</div>
+<MACRO NAME="CONCLUSION" />
+<MACRO NAME="FERMER_HTML" />

@@ -5,3 +5,7 @@ body{
 #menu, #recherche{
 	display: none;
 }
+
+.sidenoteBox, .sidenoteItem{
+    display: none;
+}

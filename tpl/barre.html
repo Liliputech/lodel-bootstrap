@@ -24,23 +24,28 @@
 <USE MACROFILE="macros_site.html" />
 
 <div id="menu">
-	<a href="index.[#EXTENSIONSCRIPTS]?page=map" class="map">
-		<strong>Plan du site</strong>
-	</a>
-	
 	<fieldset id="recherche">
-		<FUNC NAME="SEARCH_ENGINE_PUBLIC" />
+	<FUNC NAME="SEARCH_ENGINE_PUBLIC" />
 	</fieldset>
-
-	<h3><em><MACRO NAME="NOM_SITE" /></em></h3>
-	<MACRO NAME="AFFICHER_MENU" />
-
-	
-	<h3>Index</h3>
+	<hr>
+	<h3><span></span>Num&eacute;ros en texte int&eacute;gral</h3>
+	<MACRO NAME="LISTE_NUMERO_PARU" />
+	<hr>
+	<h3><span></span>Pr&eacute;sentation</h3>
+	<FUNC NAME="AFFICHER_BILLET" SECTION="presentation" />
+	<hr>
+	<h3><span></span>Informations</h3>
+	<FUNC NAME="AFFICHER_BILLET" SECTION="informations" />
+	<hr>
+	<h3><span></span>Contacts</h3>
+	<FUNC NAME="AFFICHER_BILLET" SECTION="contacts" />
+	<hr>
+	<h3><span></span>Recommandations aux auteurs</h3>
+	<FUNC NAME="AFFICHER_BILLET" SECTION="auteurs" />
+	<hr>
+	<h3><span></span>Index</h3>
 	<MACRO NAME="AFFICHER_INDEX" />
-
-	<h3>Syndication</h3>
+	<hr>
+    <h3><span></span>Suivez-nous</h3>
 	<MACRO NAME="LIENS_SYNDICATION" />
-
-
 </div>

@@ -29,36 +29,83 @@
 <MACRO NAME="INSERER_FEUILLE_DE_STYLES" />
 <MACRO NAME="PRELUDE" />
 
+<LOOP NAME="SetIntro" TABLE="publications" WHERE="identity=[#ID]" SELECT="introduction">
 	<MACRO NAME="PRESENTER_PUBLICATION" />
+	[#INTRODUCTION]
+</LOOP>	
+
+<LOOP NAME="ImageAccroche" TABLE="fichiers,entities,types" WHERE="idparent=[#ID] and fichiers.identity=entities.id and types.id=entities.idtype and types.type='imageaccroche'">
+<BEFORE>
+<div id="carousel-imageaccroche" class="carousel slide" data-ride="carousel">
+<ol class="carousel-indicators">
+	<LOOP NAME="EnteteCarousel" TABLE="fichiers,entities,types" WHERE="idparent=[#ID] and fichiers.identity=entities.id and types.id=entities.idtype and types.type='imageaccroche'">
+	<DOFIRST><li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li></DOFIRST>
+	<DO><li data-target="#carousel-example-generic" data-slide-to="[#COUNT]" class="active"></li></DO>
+	</LOOP>
+</ol>
+<!-- Wrapper for slides -->
+<div class="carousel-inner" role="listbox">
+</BEFORE>
+<DOFIRST>
+    <div class="item active">
+	<img src="[#DOCUMENT]" alt="[#DESCRIPTION]"> 
+      <div class="carousel-caption">
+        ...
+      </div>
+    </div>
+</DOFIRST>
+<DO>
+    <div class="item">
+	<img src="[#DOCUMENT]" alt="[#DESCRIPTION]"> 
+      <div class="carousel-caption">
+        ...
+      </div>
+    </div>
+</DO>
+<AFTER>
+  </div>
+
+  <!-- Controls -->
+  <a class="left carousel-control" href="#carousel-imageaccroche" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="right carousel-control" href="#carousel-imageaccroche" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+</AFTER>
+</LOOP>
+
 	<div id="map">
-		<LET VAR="idrec">[#ID]</LET>
-		<LOOP NAME="map" TABLE="entities, types" WHERE="idparent = [#IDREC] AND types.id = entities.idtype  AND class NOT IN ('')" ORDER="entities.rank">
-			<BEFORE><ul></BEFORE>
-			<li class="[#CLASS]">
-			<FUNC NAME="AFFICHER_ICONE_TYPE" IDTYPE="[#IDTYPE]" TABLE="types" />
-			<IF COND="[#CLASS] == 'textes'">
-				<LOOP NAME="getDocInfos" TABLE="textes" WHERE="id = [#ID]">
-					<strong class="auteurs"><MACRO NAME="LISTER_AUTEURS" /></strong>
-					<br class="nobr" />
-					<MACRO NAME="TITRE_DOCUMENT" />
-				</LOOP>
-			<ELSE />
-				<IF COND="[#CLASS] == 'fichiers'">
-					<LOOP NAME="getFileInfos" TABLE="fichiers" WHERE="id = [#ID]">
-						<a href="[#DOCUMENT]" class="[#TYPE]">
-							[#TITRE] ([#DOCUMENT|nicefilesize])
-						</a>
-					</LOOP>
-				<ELSE />
-					<a href="[#ID|makeurlwithid]" class="[#TYPE]">[#G_TITLE]</a>
-				</IF>
-			</IF>
-			<LET VAR="idrec">[#ID]</LET>
-			<LOOP NAME="map"></LOOP>
-			</li>			
-			<AFTER></ul></AFTER>
-		</LOOP>
-	</div>
+                <LET VAR="idrec">[#ID]</LET>
+                <LOOP NAME="map" TABLE="entities, types" WHERE="idparent = [#IDREC] AND types.id = entities.idtype  AND class NOT IN ('')" ORDER="entities.rank">
+                        <BEFORE><ul></BEFORE>
+                        <li class="[#CLASS]">
+                        <IF COND="[#CLASS] == 'textes'">
+                                <LOOP NAME="getDocInfos" TABLE="textes" WHERE="id = [#ID]">
+                                        <strong class="auteurs"><MACRO NAME="LISTER_AUTEURS" /></strong>
+                                        <br class="nobr" />
+                                        <MACRO NAME="TITRE_DOCUMENT" />
+                                </LOOP>
+                        <ELSE />
+                                <IF COND="[#CLASS] == 'fichiers'">
+                                        <LOOP NAME="getFileInfos" TABLE="fichiers" WHERE="id = [#ID]">
+                                                <a href="[#DOCUMENT]" class="[#TYPE]">
+                                                        [#TITRE] ([#DOCUMENT|nicefilesize])
+                                                </a>
+                                        </LOOP>
+                                <ELSE />
+                                        <a href="[#ID|makeurlwithid]" class="[#TYPE]">[#G_TITLE]</a>
+                                </IF>
+                        </IF>
+                        <LET VAR="idrec">[#ID]</LET>
+                        <LOOP NAME="map"></LOOP>
+                        </li>
+                        <AFTER></ul></AFTER>
+                </LOOP>
+        </div>
 	
 <MACRO NAME="CONCLUSION" />
 <MACRO NAME="FERMER_HTML" />  

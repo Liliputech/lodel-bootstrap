@@ -29,6 +29,7 @@ Home page: http://www.lodel.org
 </DEFMACRO> 
 
 <DEFMACRO NAME="FERMER_HTML">
+		<script type="text/javascript"> $(document).ready(function() { $(".fancybox").fancybox(); }); </script>
 		</body>
 	</html>
 </DEFMACRO>
@@ -42,6 +43,14 @@ Home page: http://www.lodel.org
 
 <DEFMACRO NAME="DEFINIR_CHARSET">
 	<meta http-equiv="Content-Type" content="text/html; charset=[#CHARSET]" />
+</DEFMACRO>
+
+<DEFMACRO NAME="MENUFIXE">
+<div id="menufixe">
+    <button type="button" onclick="resizeText(1)">A+</button>
+    <button type="button" onclick="resizeText(-1)">A-</button>
+    <a href="#top">&uarr;</a>
+</div>
 </DEFMACRO>
 
 <DEFMACRO NAME="INSERER_FEUILLE_DE_STYLES">
@@ -71,12 +80,29 @@ Home page: http://www.lodel.org
 			</IF>
 		</LET>
 
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/jquery.dotdotdot.min.js"></script>
+
+		<!-- Add mousewheel plugin (this is optional) -->
+		<script type="text/javascript" src="js/fancybox/lib/jquery.mousewheel.pack.js"></script>
+
+		<!-- Add fancyBox -->
+		<link rel="stylesheet" href="js/fancybox/source/jquery.fancybox.css?v=2.1.6" type="text/css" media="screen" />
+		<script type="text/javascript" src="js/fancybox/source/jquery.fancybox.pack.js?v=2.1.6"></script>
+
+		<!-- Optionally add helpers - button, thumbnail and/or media -->
+		<link rel="stylesheet" href="js/fancybox/source/helpers/jquery.fancybox-buttons.css?v=1.0.5" type="text/css" media="screen" />
+		<script type="text/javascript" src="js/fancybox/source/helpers/jquery.fancybox-buttons.js?v=1.0.5"></script>
+		<script type="text/javascript" src="js/fancybox/source/helpers/jquery.fancybox-media.js?v=1.0.6"></script>
+
+		<link rel="stylesheet" href="js/fancybox/source/helpers/jquery.fancybox-thumbs.css?v=1.0.7" type="text/css" media="screen" />
+		<script type="text/javascript" src="js/fancybox/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7"></script>
+
 		<link rel="stylesheet" type="text/css" href="css/styles_site.css" media="screen" title="Ecran" />
 		<link rel="stylesheet" type="text/css" media="print" href="css/styles_site_print.css"  title="Impression" />
 		<link rel="alternate" type="application/rss+xml" title="Actualités de <MACRO NAME="NOM_SITE" />" href="index.[#EXTENSIONSCRIPTS]?page=backend&amp;format=rssdocuments" />
-
 		<link rel="alternate" type="application/rss+xml" title="Flux RSS de [#TITREFLUX]" href="index.[#EXTENSIONSCRIPTS]?page=backend&amp;format=rss&amp;ident=[#IDRECUP]" />
-
 		<script type="text/javascript" src="js/site.js"></script>
 	</head>
 	<body> 
@@ -96,11 +122,10 @@ Home page: http://www.lodel.org
 	</LOOP>
 	
 	<!--[ METADONNEES DUBLIN CORE ]-->
-	
 	<meta name="DC.Publisher" content="<MACRO NAME="EDITEUR_SITE_POUR_METAS">" />
 	<meta name="DC.Rights" content="<MACRO NAME="DROITS_POUR_METAS">" />
         <meta name="DC.Source" content="[#CURRENTURL|dirname]" />
-	<meta name="DC.Type" content="text" />
+	<meta name="DC.Type" content="Article" />
 	<meta name="DC.Format" content="text/html" />
 	<meta name="DC.Language" content="fr" />
 	<meta name="DC.Identifier" content="[#CURRENTURL]" />
@@ -117,12 +142,12 @@ Home page: http://www.lodel.org
 	<MACRO NAME="DATE_PUBLICATION_PARENTE_POUR_METAS">
 	
 	<IF COND="[#RESUME:FR]">
-		<meta name="DC.Description" lang="fr" content="[(#RESUME:FR|textebrut|replacequotationmark)]" />
+		<meta name="resume" lang="fr" content="[(#RESUME:FR|textebrut|replacequotationmark)]" />
 	<ELSE/>
-		<meta name="DC.Description" lang="fr" content="[(#TEXTE|textebrut|replacequotationmark|couper(1500))]" />
+		<meta name="resume" lang="fr" content="[(#TEXTE|textebrut|replacequotationmark|couper(1500))]" />
 	</IF>
 	<IF COND="[#RESUME:EN]">
-		<meta name="DC.Description" lang="en" content="[(#RESUME:EN|textebrut|replacequotationmark)]" />
+		<meta name="abstract" lang="en" content="[(#RESUME:EN|textebrut|replacequotationmark)]" />
 	</IF>
 </DEFMACRO>
 
@@ -144,7 +169,7 @@ Home page: http://www.lodel.org
 	<meta name="DC.Identifier" content="[#CURRENTURL|dirname]/[#ID|makeurlwithid('sommaire')]" />
 	
 	<meta name="DC.Title" content="Sommaire : [#TITRE|textebrut|replacequotationmark] [#SOUSTITRE|replacequotationmark|textebrut]" />
-	<meta name="DC.Date" content="[#DATE]" />
+	<meta name="DC.Date" content="[#DATEPUBLI]" />
 	<meta name="DC.Description" lang="fr" content="<MACRO NAME="DESCRIPTION_META_SOMMAIRE" />" />
 </DEFMACRO>
 
@@ -170,7 +195,6 @@ Home page: http://www.lodel.org
 </DEFMACRO>
 
 <DEFFUNC NAME="SEARCH_ENGINE_PUBLIC" OPTIONAL="query,qstatus,qtype,qfield">
-
 	<form action="search.[#EXTENSIONSCRIPTS]" method="get">
 		<fieldset>
 		<input type="text" id="query" name="query" value="<IF COND="![#QUERY]">Votre recherche<ELSE/>[#QUERY|htmlspecialchars|stripslashes]</IF>"onfocus="if(this.value=='Votre recherche')this.value='';"/>
@@ -226,21 +250,18 @@ Home page: http://www.lodel.org
 
 <DEFMACRO NAME="PRELUDE">
 	<div id="main">	
-		<div id="accessible">
+		<!--<div id="accessible">
 			<a href="#menu">Aller à la navigation</a>
 			&nbsp;|&nbsp;
 			<a href="#inside">Aller au contenu</a>
-		</div>		
-		<h1 id="cartouche">
-			<a href="index.[#EXTENSIONSCRIPTS]">
-			<MACRO NAME="NOM_SITE" />
-			<br class="nobr" />
-			<span class="sousTitre">
-			<MACRO NAME="DESCRIPTION_SITE" />
-			</span>
-			</a>
+		</div>-->
+		<a href="/[#SITE]">
+        <h1 id="cartouche">
+			<img src="images/logo_[#SITE].png"></img>
 		</h1>
+        </a>
 		<div id="content" class="<IF COND="[#TYPE|is_array]">[#TYPE.TYPE]<ELSE/>[#TYPE]</IF>">
+            <IF COND="![#TYPE]"><MACRO NAME="ACTUALITE"></IF>
 			<div id="inside" class="<IF COND="[#TYPE|is_array]">[#TYPE.TYPE]<ELSE/>[#TYPE]</IF>">
 				<MACRO NAME="ARIANE">
 </DEFMACRO>
@@ -248,14 +269,24 @@ Home page: http://www.lodel.org
 <DEFMACRO NAME="CONCLUSION"> 
 			</div> <!--[ Fin #inside ]-->
 			<USE TEMPLATEFILE="barre" />
-			<MACRO NAME="FOOTER" /> 
+            <MACRO NAME="MENUFIXE">
 		</div> <!--[ Fin #content ]-->
-		
+	<MACRO NAME="FOOTER" /> 
 	</div>	<!--[ Fin #main ]-->
 </DEFMACRO>
 
 <DEFMACRO NAME="FOOTER"> 
-	<div id="footer"><a href="http://www.lodel.org">édité par Lodel</a> | <a href="lodel/">accès réservé</a></div>
+	<div id="footer">
+        <table>
+        <tr>
+        <td><img src="images/logo_[#SITE].png" height="70px" style="float: left;"></td>
+        <td>ISSN électronique : en cours
+        <br><a href="http://lodel.org/">Edité avec Lodel</a> - <a href="lodel">Accès réservé</a>
+        </td>
+		<td><img src="images/footer_[#SITE].png" height="auto" style="float:right;margin-right:25px;margin-top:10px;"></td>
+        </tr>
+        </table>
+	</div>
 </DEFMACRO>
 
 <!--[ Fin Macros Communes à toutes les pages ]-->
@@ -282,15 +313,15 @@ Home page: http://www.lodel.org
 </DEFMACRO>
 
 <DEFMACRO NAME="EDITEUR_SITE_POUR_METAS">
-	Nom de votre éditeur
+	UJML3
 </DEFMACRO>
 
 <DEFMACRO NAME="DESCRIPTION_SITE">
-	Description de votre site
+	Revues CLHDPP : Cahiers Jean Moulin
 </DEFMACRO>
 
 <DEFMACRO NAME="DESCRIPTION_SITE_POUR_METAS">
-	Description de votre site
+	Revues CLHDPP : Cahiers Jean Moulin
 </DEFMACRO>
 
 <DEFMACRO NAME="DESCRIPTION_META_SOMMAIRE">
@@ -322,10 +353,10 @@ Home page: http://www.lodel.org
 </DEFMACRO>
 
 <DEFMACRO NAME="DATE_PUBLICATION_PARENTE_POUR_METAS">
-	<LOOP NAME="date_publication_parente_pour_metas" TABLE="publications, relations" WHERE="id2='[#IDPARENT]' AND type!='regroupement' AND id=id1" ORDER="degree"> 
+	<LOOP NAME="date_publication_parente_pour_metas" TABLE="publications, relations" WHERE="id2='[#IDPARENT]' AND type!='collection' AND id=id1" ORDER="degree"> 
 		<DO>
-			<IF COND="[#DATE|isadate]">
-				<meta name="DC.Date" content="[#DATE]" />
+			<IF COND="[#DATEPUBLI|isadate]">
+				<meta name="DC.Date" content="[#DATEPUBLI]" />
 			</IF>
 		</DO>
 	</LOOP>
@@ -408,10 +439,48 @@ Home page: http://www.lodel.org
 	
 </DEFMACRO>	
 
+<DEFMACRO NAME="LISTE_NUMERO_PARU">
+	<LOOP NAME="getAllIssues" TABLE="publications" WHERE="type LIKE 'numero'" ORDER="datepubli DESC">
+		<BEFORE><ul class="publisMenu"></BEFORE>
+                <li>
+                        <a href="[#ID|makeurlwithid]">[#TITRE] : [#SOUSTITRE]</a>
+                </li>
+                <AFTER></ul></AFTER>
+	</LOOP>
+</DEFMACRO>
+
+<DEFFUNC NAME="AFFICHER_BILLET" REQUIRED="section">
+	
+	<LOOP NAME="getRootNotes" TABLE="textessimples" WHERE="section LIKE '[#SECTION]'">
+		<BEFORE><ul class="billet"></BEFORE>
+		<li>
+			<a href="[#ID|makeurlwithid]">[#TITRE]</a>
+		</li>
+		<AFTER></ul></AFTER>
+	</LOOP>
+	
+</DEFFUNC>	
+
+<DEFMACRO NAME="ACTUALITE">
+<div id="actu">
+	<LOOP NAME="getRootNotes" TABLE="textessimples" WHERE="section LIKE 'actu'">
+            <DOFIRST>
+			<a href="[#ID|makeurlwithid]">[#TITRE]</a>
+            <br><br>
+            [#TEXTE]
+            </DOFIRST>
+            <hr>
+			<a href="[#ID|makeurlwithid]">[#TITRE]</a>
+            <br><br>
+            [#TEXTE]
+	</LOOP>
+</div>
+</DEFMACRO>            
+
 <DEFMACRO NAME="AFFICHER_INDEX">
 	
 	<ul class="typepersonne">
-	<LOOP NAME="persontypes" TABLE="persons, persontypes"  SELECT="DISTINCT persons.idtype, title, persontypes.rank" WHERE="persons.idtype = persontypes.id" ORDER="persontypes.rank">
+	<LOOP NAME="persontypes" TABLE="persons, persontypes"  SELECT="DISTINCT persons.idtype, title, persontypes.rank" WHERE="persons.idtype = persontypes.id AND persontypes.type='auteur'" ORDER="persontypes.rank">
 		<li>
 		<a href="[#IDTYPE|makeurlwithid]">[#TITLE]</a>
 		</li>
@@ -453,10 +522,10 @@ Home page: http://www.lodel.org
 
 <DEFMACRO NAME="PRESENTER_PUBLICATION">
 	<h2 class="publiParente">
-                <MACRO NAME="TITRE_PUBLICATION">
-		<span class="sousTitre">
+        <span></span><MACRO NAME="TITRE_PUBLICATION">
+		<div class="sousTitre">
 			<br class="nobr" /><MACRO NAME="SOUSTITRE_PUBLICATION">
-	 	</span>
+	 	</div>
 	</h2>
 	<IF COND="[#INTRODUCTION]">
 		<p class="extrait">
@@ -567,8 +636,8 @@ Home page: http://www.lodel.org
 <!--[ Affiche notice biblio du doc en cours                              ]-->
 <!--[ ****************************************************************** ]-->
 	<MACRO NAME="LISTER_AUTEURS">, &laquo;[#TITRE]&raquo;, <em><MACRO NAME="NOM_SITE"></em> [En ligne], 
-	<LOOP NAME="paru_dans_simple_citation" TABLE="relations, entities" WHERE="id2='[#ID]' AND id = id1">
-                [#G_TITLE], 
+	<LOOP NAME="paru_dans_simple_citation" TABLE="relations, entities, types" WHERE="id2='[#ID]' AND entities.id = id1 AND types.id=entities.idtype AND type='numero'">
+                 n&deg;[#RANK], 
 	</LOOP>
 	mis à jour le : [#MODIFICATIONDATE|formateddate('%d/%m/%Y')], 
 	URL : [#CURRENTURL|dirname]/[#ID|makeurlwithid].
@@ -578,7 +647,7 @@ Home page: http://www.lodel.org
 	<ul>
 		<li>
 			<a href="index.[#EXTENSIONSCRIPTS]?page=backend&amp;format=rssdocuments">
-				Documents
+				Flux RSS
 			</a>
 		</li>
 	</ul>
@@ -858,9 +927,9 @@ Home page: http://www.lodel.org
 <LOOP NAME="description_auteur" TABLE="auteurs" WHERE="iddocument='[#ID]'" ORDER="rank"> 
 	<DO>
 		<IF COND="[#DESCRIPTION]">
-		 	<h4>
+		 	<h4 id="auteur">
 				<strong>Quelques mots &agrave; propos de :&nbsp;</strong> 
-				<a class="auteur" href="personne.[#EXTENSIONSCRIPTS]?type=auteur&amp;id=[#ID]">
+				<a class="auteur" href="index.php?id=[#ID]">
 					[#PRENOM]&nbsp;
 					<span class="smallcaps">[#NOMFAMILLE]</span>
 				</a>
@@ -879,6 +948,7 @@ Home page: http://www.lodel.org
 
 <DEFMACRO NAME="ICONE_PUBLICATION">
 <!--[ ****************************************************************** ]-->
+
 <!--[ version 2.0                                                        ]-->
 <!--[ Affiche, s'il elle existe, l'icï¿½e de la publication.              ]-->
 <!--[ ****************************************************************** ]-->
@@ -1015,8 +1085,3 @@ Home page: http://www.lodel.org
 </IF>
 
 </DEFMACRO>
-
-	
-		
-
-

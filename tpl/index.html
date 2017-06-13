@@ -38,10 +38,48 @@
 // 	mail('bruno.cenou@revues.org', 'context', $content);
 ?>
 
-<h2 class="publiParente">Les derniers textes de <em><MACRO NAME="NOM_SITE" /></em></h2>
-<LOOP NAME="getTypes" TABLE="types, entities" WHERE="class IN ('textes') AND idtype = types.id" SELECT="DISTINCT idtype, types.title">
-	<h3 class="accueil">[#TITLE]</h3>
-	<FUNC NAME="LISTER_DOCUMENTS" NB="10" TYPE="[#TYPE]" ORDER="modificationdate DESC" />
+<LOOP NAME="getrevues" TABLE="publications,entities,types" WHERE="publications.identity=entities.id and entities.idtype=types.id and types.type='collection'" SELECT="entities.id,titre,introduction,datepubli" ORDER="datepubli DESC">
+<IF COND="[#INTRODUCTION]">
+	<br>
+	[#INTRODUCTION]<br>
+    <hr>
+	<h2><span></span>Dernier num&eacute;ro paru</h2>
+	<LOOP NAME="getIntros" TABLE="publications,entities,types" WHERE="publications.identity=entities.id and entities.idtype=types.id and types.type='numero' and idparent=[#ID]" SELECT="id,titre,soustitre,introduction,datepubli" ORDER="datepubli DESC" LIMIT="1">
+		<IF COND="[#NBRESULTS]">
+		<h3>[#TITRE] : [#SOUSTITRE]</h3>
+		[#INTRODUCTION]
+		</IF>
+		<div id="map">
+                <LET VAR="idrec">[#ID]</LET>
+                <LOOP NAME="map" TABLE="entities, types" WHERE="idparent = [#IDREC] AND types.id = entities.idtype  AND class NOT IN ('')" ORDER="entities.rank">
+                        <BEFORE><ul></BEFORE>
+                        <li class="[#CLASS]">
+                        <IF COND="[#CLASS] == 'textes'">
+                                <LOOP NAME="getDocInfos" TABLE="textes" WHERE="id = [#ID]">
+                                        <strong class="auteurs"><MACRO NAME="LISTER_AUTEURS" /></strong>
+                                        <br class="nobr" />
+                                        <MACRO NAME="TITRE_DOCUMENT" />
+                                </LOOP>
+                        <ELSE />
+                                <IF COND="[#CLASS] == 'fichiers'">
+                                        <LOOP NAME="getFileInfos" TABLE="fichiers" WHERE="id = [#ID]">
+                                                <a href="[#DOCUMENT]" class="[#TYPE]">
+                                                        [#TITRE] ([#DOCUMENT|nicefilesize])
+                                                </a>
+                                        </LOOP>
+                                <ELSE />
+                                        <a href="[#ID|makeurlwithid]" class="[#TYPE]">[#G_TITLE]</a>
+                                </IF>
+                        </IF>
+                        <LET VAR="idrec">[#ID]</LET>
+                        <LOOP NAME="map"></LOOP>
+                        </li>
+                        <AFTER></ul></AFTER>
+                </LOOP>
+        	</div>
+	</LOOP>
+</IF>
 </LOOP>
+
 <MACRO NAME="CONCLUSION" />
 <MACRO NAME="FERMER_HTML" />  

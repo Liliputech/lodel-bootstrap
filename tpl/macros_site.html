@@ -99,8 +99,9 @@ Home page: http://www.lodel.org
 		<link rel="stylesheet" href="js/fancybox/source/helpers/jquery.fancybox-thumbs.css?v=1.0.7" type="text/css" media="screen" />
 		<script type="text/javascript" src="js/fancybox/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7"></script>
 
-		<link rel="stylesheet" type="text/css" href="css/styles_site.css" media="screen" title="Ecran" />
-		<link rel="stylesheet" type="text/css" media="print" href="css/styles_site_print.css"  title="Impression" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" media="screen" title="Ecran" />
+		<link rel="stylesheet" type="text/css" href="css/style_site.css" media="screen" title="Ecran" />
+		<link rel="stylesheet" type="text/css" href="css/style_site_print.css" media="print" title="Ecran" />
 		<link rel="alternate" type="application/rss+xml" title="Actualités de <MACRO NAME="NOM_SITE" />" href="index.[#EXTENSIONSCRIPTS]?page=backend&amp;format=rssdocuments" />
 		<link rel="alternate" type="application/rss+xml" title="Flux RSS de [#TITREFLUX]" href="index.[#EXTENSIONSCRIPTS]?page=backend&amp;format=rss&amp;ident=[#IDRECUP]" />
 		<script type="text/javascript" src="js/site.js"></script>
@@ -195,27 +196,31 @@ Home page: http://www.lodel.org
 </DEFMACRO>
 
 <DEFFUNC NAME="SEARCH_ENGINE_PUBLIC" OPTIONAL="query,qstatus,qtype,qfield">
+	<div class="row">
 	<form action="search.[#EXTENSIONSCRIPTS]" method="get">
 		<fieldset>
-		<input type="text" id="query" name="query" value="<IF COND="![#QUERY]">Votre recherche<ELSE/>[#QUERY|htmlspecialchars|stripslashes]</IF>"onfocus="if(this.value=='Votre recherche')this.value='';"/>
+		<input type="text" id="query" name="query" class="col-xs-12" value="<IF COND="[#QUERY]">[#QUERY|htmlspecialchars|stripslashes]</IF>"/>
 		<input class="searchbutton" type="submit" name="submit_s" value="<IF COND="[#QUERY]">Affiner la recherche<ELSE/>Rechercher</IF>" />
 		<a href="#" onclick="if(document.getElementById('advanced_search').style.display=='none'){document.getElementById('advanced_search').style.display='block';} else {document.getElementById('advanced_search').style.display='none';}; return(false); ">
 			<span class="texte_petit">avanc&eacute;e</span>
 		</a>
 		</fieldset>
-		<div  id="advanced_search" <IF COND="![#QSTATUS] AND ![#QTYPE] AND ![#QFIELD]">style="display : none"</IF>>
+		<div id="advanced_search" <IF COND="![#QSTATUS] AND ![#QTYPE] AND ![#QFIELD]">style="display : none"</IF>>
 		<fieldset class="searchfieldset">
 		<legend>Recherche avanc&eacute;e</legend>
-		<select id="qnbresults" name="qnbresults" class="searchfields">
+		<div class="row">
+		<select id="qnbresults" name="qnbresults" class="searchfields col-sm-12">
 			<option value="10" <IF COND="[#QNBRESULTS] EQ 10">selected="selected"</IF>>10 r&eacute;sultats par page</option>
 			<option value="20" <IF COND="[#QNBRESULTS] EQ 20">selected="selected"</IF>>20 r&eacute;sultats par page</option>
 			<option value="50" <IF COND="[#QNBRESULTS] EQ 50">selected="selected"</IF>>50 r&eacute;sultats par page</option>
 			<option value="100" <IF COND="[#QNBRESULTS] EQ 100">selected="selected"</IF>>100 r&eacute;sultats par page</option>
 		</select>
+		</div>
 		<LOOP NAME="listtypes" TABLE="types" WHERE="search=1"ORDER="rank" >
 		<BEFORE>
-			<label for="qtype">Type :</label>
-			<select  id="qtype" name="qtype" class="searchfields" <!--[onchange="updatefields(this);"]-->>
+			<div class="row">
+			<label for="qtype" class="col-sm-3">Type</label>
+			<select id="qtype" name="qtype" class="searchfields col-sm-9" <!--[onchange="updatefields(this);"]-->>
 			<option id="[#CLASS]_[#ID]" value=""> -- Tous -- </option>
 		</BEFORE>
 		<DO>
@@ -223,11 +228,13 @@ Home page: http://www.lodel.org
 		</DO>
 		<AFTER>
 			</select>
+			</div>
 		</AFTER>
 		</LOOP>
 		
-		<label for="qfield">Champ : </label>
-		<select id="qfield" name="qfield" class="searchfields">
+		<div class="row">
+		<label for="qfield" class="col-sm-3">Champ</label>
+		<select id="qfield" name="qfield" class="searchfields col-sm-9">
 			<option value=""> -- Tous --</option>
 			<option value="DC.Title" <IF COND="[#QFIELD] EQ 'DC.Title'">selected="selected"</IF>>Titre</option>
 			<option value="DC.Description" <IF COND="[#QFIELD] EQ 'DC.Description'">selected="selected"</IF>>Description</option>
@@ -240,7 +247,8 @@ Home page: http://www.lodel.org
 		
 		</fieldset>
 		</div>
-	</form>		
+	</form>
+	</div>		
 </DEFFUNC>
 
 <!--[ Fin Macros Techniques ]-->
@@ -249,26 +257,23 @@ Home page: http://www.lodel.org
 <!--[ Macros Communes à toutes les pages ]-->
 
 <DEFMACRO NAME="PRELUDE">
-	<div id="main">	
-		<!--<div id="accessible">
-			<a href="#menu">Aller à la navigation</a>
-			&nbsp;|&nbsp;
-			<a href="#inside">Aller au contenu</a>
-		</div>-->
-		<a href="/[#SITE]">
+	<div id="main" class="container-fluid">	
+	<div id="cartouche" class="row">
+	<a href="/[#SITE]">
         <h1 id="cartouche">
 			<img src="images/logo_[#SITE].png"></img>
 		</h1>
         </a>
-		<div id="content" class="<IF COND="[#TYPE|is_array]">[#TYPE.TYPE]<ELSE/>[#TYPE]</IF>">
-            <IF COND="![#TYPE]"><MACRO NAME="ACTUALITE"></IF>
-			<div id="inside" class="<IF COND="[#TYPE|is_array]">[#TYPE.TYPE]<ELSE/>[#TYPE]</IF>">
-				<MACRO NAME="ARIANE">
+	</div>
+	<div id="content" class="row <IF COND="[#TYPE|is_array]">[#TYPE.TYPE]<ELSE/>[#TYPE]</IF>">
+			<USE TEMPLATEFILE="barre" />
+			<div id="inside" class="<IF COND="[#TYPE|is_array]">[#TYPE.TYPE]<ELSE/>[#TYPE]</IF> <IF COND="[#TYPE]">col-sm-9 col-md-10<ELSE/>col-sm-7 col-md-8</IF>">
+			<MACRO NAME="ARIANE">
 </DEFMACRO>
 
 <DEFMACRO NAME="CONCLUSION"> 
 			</div> <!--[ Fin #inside ]-->
-			<USE TEMPLATEFILE="barre" />
+            		<IF COND="![#TYPE]"><MACRO NAME="ACTUALITE"></IF>
             <MACRO NAME="MENUFIXE">
 		</div> <!--[ Fin #content ]-->
 	<MACRO NAME="FOOTER" /> 
@@ -276,7 +281,7 @@ Home page: http://www.lodel.org
 </DEFMACRO>
 
 <DEFMACRO NAME="FOOTER"> 
-	<div id="footer">
+	<div id="footer" class="row">
         <table>
         <tr>
         <td><img src="images/logo_[#SITE].png" height="70px" style="float: left;"></td>
@@ -462,7 +467,7 @@ Home page: http://www.lodel.org
 </DEFFUNC>	
 
 <DEFMACRO NAME="ACTUALITE">
-<div id="actu">
+<div id="actu" class="col-md-2">
 	<LOOP NAME="getRootNotes" TABLE="textessimples" WHERE="section LIKE 'actu'">
             <DOFIRST>
 			<a href="[#ID|makeurlwithid]">[#TITRE]</a>
@@ -691,15 +696,17 @@ Home page: http://www.lodel.org
 <!--[ Navigation ]-->
 
 <DEFMACRO NAME="ARIANE">
-	<ul id="ariane">
-		<li><a href="index.[#EXTENSIONSCRIPTS]">accueil</a>&nbsp;&gt;</li>
+	<div class="row">
+	<ul id="ariane" class="nav navbar-nav">
+		<li><a href="index.[#EXTENSIONSCRIPTS]">Accueil</a></li>
 		<LOOP NAME="ariane" TABLE="relations, entities" WHERE="id2 = '[#ID]' AND nature = 'P' AND id1 = entities.id" ORDER="degree DESC">
 		<li><a href="[#ID|makeurlwithid]">
 			[#G_TITLE|couper(50)]
 			<IF COND="[#G_TITLE|hasbeencut]">...</IF>
-		</a>&nbsp;&gt;</li>
+		</a></li>
 		</LOOP>
 	</ul>
+	</div>
 </DEFMACRO>
 
 <DEFMACRO NAME="BLOC_NAVIGATION_DOCUMENTS">

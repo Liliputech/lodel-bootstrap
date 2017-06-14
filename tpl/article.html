@@ -171,33 +171,32 @@
 		<!--[ ----------------------------------------------------------------------- ]-->
 	<IF COND="[#DATEPUBLI] le today()">
 		<IF COND="[#TEXTE]">
-			<div id="toc">
-				<LOOP NAME="toc" TEXT="[#TEXTE]">
-					<BEFORE>
-						<a href="#top"><h4>Table des matières</h4></a>
-					</BEFORE>
-					<DO>
-                                          <IF COND="[#NIVEAU]==1"><div class="toc_section1"><a href="#tocto[#TOCID]" name="tocfrom[#TOCID]">[(#TITRE|removenotes)] </a></div></IF>
-                                          <IF COND="[#NIVEAU]==2"><div class="toc_section2"><a  href="#tocto[#TOCID]" name="tocfrom[#TOCID]">[(#TITRE|removenotes)] </a></div></IF>
-                                          <IF COND="[#NIVEAU]==3"><div class="toc_section3"><a  href="#tocto[#TOCID]" name="tocfrom[#TOCID]">[(#TITRE|removenotes)] </a></div></IF>
-                                          <IF COND="[#NIVEAU]==4"><div class="toc_section4"><a href="#tocto[#TOCID]" name="tocfrom[#TOCID]">[(#TITRE|removenotes)] </a></div></IF>
-                                          <IF COND="[#NIVEAU]==5"><div class="toc_section5"><a  href="#tocto[#TOCID]" name="tocfrom[#TOCID]">[(#TITRE|removenotes)] </a></div></IF>
-                                          <IF COND="[#NIVEAU]==6"><div class="toc_section6"><a  href="#tocto[#TOCID]" name="tocfrom[#TOCID]">[(#TITRE|removenotes)] </a></div></IF>
-                                         </DO>
-				</LOOP>
+			<hr>
+			<a href="#top"><h4>Table des matières</h4></a>
+			<div id="toc" class="well">
+			<ul>
+			<LET VAR="niveauprecedent" GLOBAL="1">1</LET>
+			<LOOP NAME="toc" TEXT="[#TEXTE]">
+				<LET VAR="niveauprecedent">[%NIVEAUPRECEDENT]</LET>
+				<IF COND="[#NIVEAU] GT [%NIVEAUPRECEDENT]"><ul></IF>
+				<?php for(;$context['niveau']<$context['niveauprecedent'];$context['niveauprecedent']--) print("</ul>"); ?>
+				<LET VAR="niveauprecedent" GLOBAL="1">[#NIVEAU]</LET>
+				<li><a href="#tocto[#TOCID]" name="tocfrom[#TOCID]">[(#TITRE|removenotes)]</a></li>
+			</LOOP>
+			</ul>
 			</div>
 				
 			<IF COND="[#TYPE] == 'article'">
-                <hr>
+                		<hr>
 				<a href="#top"><h4 id="text">Texte intégral</h4></a>
 			</IF>
 			<IF COND="[#ICONE]">
 				<div class="icone">
-					<img src="[#ICONE]" alt="[#IDENTIFIANT]" hspace="4" vspace="4" border="1" align="left">
+				<img src="[#ICONE]" alt="[#IDENTIFIANT]" hspace="4" vspace="4" border="1" align="left">
 				</div>
 			</IF>
 
-			<div id="texte">
+			<div id="texte" class="text-justify">
 				[(#TEXTE|tocable|lettrine|paranumber('texte'))]
 				[(#NOTESBASPAGE|notes("nombre"))]
 			</div>

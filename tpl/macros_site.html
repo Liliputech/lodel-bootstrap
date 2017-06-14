@@ -262,7 +262,7 @@ Home page: http://www.lodel.org
 	<a href="/[#SITE]">
         <h1 id="cartouche">
 			<img src="images/logo_[#SITE].png"></img>
-		</h1>
+	</h1>
         </a>
 	</div>
 	<div id="content" class="row <IF COND="[#TYPE|is_array]">[#TYPE.TYPE]<ELSE/>[#TYPE]</IF>">
@@ -282,15 +282,16 @@ Home page: http://www.lodel.org
 
 <DEFMACRO NAME="FOOTER"> 
 	<div id="footer" class="row">
-        <table>
-        <tr>
-        <td><img src="images/logo_[#SITE].png" height="70px" style="float: left;"></td>
-        <td>ISSN électronique : en cours
-        <br><a href="http://lodel.org/">Edité avec Lodel</a> - <a href="lodel">Accès réservé</a>
-        </td>
-		<td><img src="images/footer_[#SITE].png" height="auto" style="float:right;margin-right:25px;margin-top:10px;"></td>
-        </tr>
-        </table>
+		<div class="col-sm-2">
+			<img src="images/logo_[#SITE].png" height="70px" style="float: left;">
+		</div>
+		<div class="col-sm-8 text-center">
+			ISSN électronique : en cours
+        		<br><a href="http://lodel.org/">Edité avec Lodel</a> - <a href="lodel">Accès réservé</a>
+		</div>	
+		<div class="col-sm-2">
+			<img src="images/footer_[#SITE].png" height="auto" style="float:right;margin-right:25px;margin-top:10px;">	
+		</div>	
 	</div>
 </DEFMACRO>
 

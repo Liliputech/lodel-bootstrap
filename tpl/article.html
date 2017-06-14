@@ -38,8 +38,8 @@
 <MACRO NAME="INSERER_FEUILLE_DE_STYLES" />
 <MACRO NAME="PRELUDE" />
 
-<div class="col-sm-10">
-	<div id="enteteDocument">				               
+	<div id="enteteDocument" class="row">				               
+		<div class="col-sm-12">
 		<h3>
 			<IF COND="[#SURTITRE]">
 				<span class="surTitre">[#SURTITRE]</span><br class="nobr" />
@@ -50,8 +50,11 @@
 			</IF>
 		</h3>
 		<div class="auteur"><MACRO NAME="LISTER_AUTEURS"></div>
-	</div>
-	<ul class="nav nav-tabs nav-justified">
+	</div></div>
+	<div id="shortcuts" class="row">
+		<div class="col-sm-12">
+		<ul class="nav nav-tabs nav-justified">
+		<IF COND="[#ERRATUM]"><li><a href="#erratum">Erratum</a></li></IF>
 		<IF COND="[#RESUME]"><li><a href="#abstract">R&eacute;sum&eacute;</a></li></IF>
 		<IF COND="[#NIVEAU]"><li><a href="#toc">Plan</a></li></IF>
 		<IF COND="[#TEXTE]"><li><a href="#text">Texte</a></li></IF>
@@ -59,11 +62,11 @@
 		<IF COND="[#NOTESBASPAGE]"><li><a href="#notes">Notes</a></li></IF>
 		<li><a href="#citation">Citer</a></li>
 		<li><a href="#auteur">Auteur</a></li>
-	</ul>
-	<div id="shortcuts">
-	<IF COND="[#ERRATUM]"><a href="#erratum">Erratum</a></IF>
-	</div>
+		</ul>
+	</div></div>
 
+	<div id="redac" class="row">
+	<div class="col-sm-12">
 	<!--[ Erratum -]-->
 	<IF COND="[#ERRATUM]">
 		<a href="#top"><h4>Errata</h4></a>
@@ -87,7 +90,9 @@
 			[(#HISTORIQUE|tocss)]
 		</div>
 	</IF>
-
+	</div></div>
+	<div id="abstract" class="row">
+	<div class="col-sm-12 text-justified">
 	<IF COND="[#RESUME]">
 	<a href="#top"><h4 id="abstract">R&eacute;sum&eacute;</h4></a>
 	</IF>
@@ -164,7 +169,7 @@
 			</div>
 		</IF>
 		</div>
-	<!--</div>-->
+	</div></div>
 					
 		<!--[ ----------------------------------------------------------------------- ]-->
 		<!--[ Cette partie ne s'affiche que si le texte est autorisé à la publication ]-->
@@ -196,17 +201,23 @@
 				</div>
 			</IF>
 
-			<div id="texte" class="text-justify">
+			<div class="row">
+			<div id="texte" class="<IF COND="[#NOTESBASPAGE]">col-md-10<ELSE/>col-md-12</IF> text-justify">
 				[(#TEXTE|tocable|lettrine|paranumber('texte'))]
-				[(#NOTESBASPAGE|notes("nombre"))]
 			</div>
-			
+			<IF COND="[#NOTESBASPAGE]">
+				<div id="notes" class="col-md-2">
+					[(#NOTESBASPAGE|notes("nombre"))]
+				</div>
+			</IF>
+			</div>	
 		</IF>
 
-		<div id="annexes">
+		<div id="annexes" class="row">
+		<div class="col-sm-12">
 			<!--[ Bibliographie. Si elle existe -]-->
 			<IF COND="[#BIBLIOGRAPHIE]">
-                <hr>
+                		<hr>
 				<a href="#top"><h4 id="bibliographie">
 					<MACRO NAME="LANGUE_TITRE_BIBLIOGRAPHIE">
 				</h4></a>
@@ -273,12 +284,11 @@
 								
 	<!--[ Si le texte n'est pas encore autorisé à être publié ]-->
 	<ELSE/>
-		<div id="annexes">
 		<a href="#top"><h4>Ce document sera publié en ligne en texte intégral le [(#DATEPUBLI|humandate)].</h4></a>
 	</IF>
 					
 	<!--[ Affiche la notice bibliographique du document en cours ]-->		
-        <hr>
+        	<hr>
 		<a href="#top"><h4 id="citation">Pour citer ce document</h4></a>
 		<div id="pourCiter">
 			<MACRO NAME="CITATION"> 
@@ -288,8 +298,8 @@
 	<a href="#top"><h4>Auteur</h4></a>
 	<MACRO NAME="DESCRIPTION_AUTEURS">
 	<MACRO NAME="RECENSIONS">
-	</div><!-- fin annexes -->
-	<script>sidenotes()</script>
+	</div></div><!-- fin annexes -->
+	<!--<script>sidenotes()</script>-->
 	<script>responsiveImages()</script>
 <MACRO NAME="BLOC_NAVIGATION_DOCUMENTS">
 </div>

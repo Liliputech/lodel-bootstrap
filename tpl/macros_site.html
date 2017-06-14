@@ -46,7 +46,7 @@ Home page: http://www.lodel.org
 </DEFMACRO>
 
 <DEFMACRO NAME="MENUFIXE">
-<div id="menufixe">
+<div id="menufixe" style="position:fixed;bottom:0;right:0">
     <button type="button" onclick="resizeText(1)">A+</button>
     <button type="button" onclick="resizeText(-1)">A-</button>
     <a href="#top">&uarr;</a>
@@ -698,6 +698,7 @@ Home page: http://www.lodel.org
 
 <DEFMACRO NAME="ARIANE">
 	<div class="row">
+	<div class="col-sm-12">
 	<ul id="ariane" class="nav navbar-nav">
 		<li><a href="index.[#EXTENSIONSCRIPTS]">Accueil</a></li>
 		<LOOP NAME="ariane" TABLE="relations, entities" WHERE="id2 = '[#ID]' AND nature = 'P' AND id1 = entities.id" ORDER="degree DESC">
@@ -707,6 +708,7 @@ Home page: http://www.lodel.org
 		</a></li>
 		</LOOP>
 	</ul>
+	</div>
 	</div>
 </DEFMACRO>
 

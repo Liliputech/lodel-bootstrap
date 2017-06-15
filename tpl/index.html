@@ -42,7 +42,7 @@
 <IF COND="[#INTRODUCTION]">
 	<br>
 	[#INTRODUCTION]<br>
-    <hr>
+	<hr>
 	<h2><span></span>Dernier num&eacute;ro paru</h2>
 	<LOOP NAME="getIntros" TABLE="publications,entities,types" WHERE="publications.identity=entities.id and entities.idtype=types.id and types.type='numero' and idparent=[#ID]" SELECT="id,titre,soustitre,introduction,datepubli" ORDER="datepubli DESC" LIMIT="1">
 		<IF COND="[#NBRESULTS]">

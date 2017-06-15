@@ -11,34 +11,22 @@ function insertAfter(newNode, referenceNode) {
 function sidenotes()
 {
 	var elem = document.querySelectorAll("#texte > p");
-	var paragraphe = 0;
-	var previousSidenoteBox;
+	var ps, processedNotes=0 , notes = document.getElementsByClassName("notesbaspage");
 	for (var i = 0; i < elem.length; i++) {
-
-		//si l'élement a un numéro de paragraphe
-		if(elem[i].getElementsByClassName("paranumber").length) {
-		
-			sidenoteBox = document.createElement('p');
-			sidenoteBox.className = "sidenoteBox";
-			if(i>0){
-				offset = previousSidenoteBox.offsetHeight - elem[i-1].offsetHeight;
-				lastOffset = parseInt(previousSidenoteBox.style.top);
-				if(!isNaN(lastOffset)) offset += lastOffset;
-                        	if(offset>0) sidenoteBox.style.top = offset+"px" ;
+		var paraNotes=elem[i].getElementsByClassName("footnotecall");
+		if(paraNotes.length) {
+			// Si le paragraphe contient des notes
+			var paraTop = elem[i].offsetTop;
+			for(var j = 0; j < paraNotes.length; j++) {
+				var sidenote = notes[processedNotes];
+				var marginTop=ps?paraTop-ps.offsetTop-ps.offsetHeight:paraTop;
+				sidenote.style.marginTop=(marginTop>0?marginTop:0)+"px";
+				sidenote.className = "notesbaspage dot-ellipsis dot-resize-update";
+				sidenote.firstChild.setAttribute("href", "#"+sidenote.firstChild.id);
+				sidenote.firstChild.removeAttribute("id");
+				ps = sidenote;
+				processedNotes++;
 			}
-			insertAfter(sidenoteBox,document.getElementsByClassName("paranumber")[paragraphe]);
-			previousSidenoteBox = sidenoteBox;
-			paragraphe++;
-		}
-	
-		//Parcours des notes
-		var sidenotes = elem[i].getElementsByClassName("footnotecall");
-		for(var j = 0; j < sidenotes.length; j++) {
-			var sidenote = document.getElementsByClassName("notesbaspage")[0];
-			sidenote.className = "sidenoteItem dot-ellipsis dot-resize-update";
-			sidenote.firstChild.setAttribute("href", "#"+sidenote.firstChild.id);
-			sidenote.firstChild.removeAttribute("id");
-			sidenoteBox.appendChild(sidenote);
 		}
 	}
 }
@@ -61,3 +49,14 @@ function responsiveImages() {
     fancybox.appendChild(articleImages[i]);
   }
 }
+
+var resizeTimer;
+window.onresize=function() {
+	clearTimeout(resizeTimer);
+	resizeTimer = setTimeout( sidenotes(), 250);
+};
+window.onload=function(){
+	sidenotes();
+	responsiveImages();
+	$(".fancybox").fancybox();
+};

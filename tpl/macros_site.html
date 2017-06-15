@@ -29,7 +29,6 @@ Home page: http://www.lodel.org
 </DEFMACRO> 
 
 <DEFMACRO NAME="FERMER_HTML">
-		<script type="text/javascript"> $(document).ready(function() { $(".fancybox").fancybox(); }); </script>
 		</body>
 	</html>
 </DEFMACRO>
@@ -257,7 +256,7 @@ Home page: http://www.lodel.org
 <!--[ Macros Communes à toutes les pages ]-->
 
 <DEFMACRO NAME="PRELUDE">
-	<div id="main" class="container-fluid">	
+	<div id="main" class="container">	
 	<div id="cartouche" class="row">
 	<a href="/[#SITE]">
         <h1 id="cartouche">
@@ -267,29 +266,29 @@ Home page: http://www.lodel.org
 	</div>
 	<div id="content" class="row <IF COND="[#TYPE|is_array]">[#TYPE.TYPE]<ELSE/>[#TYPE]</IF>">
 			<USE TEMPLATEFILE="barre" />
-			<div id="inside" class="<IF COND="[#TYPE|is_array]">[#TYPE.TYPE]<ELSE/>[#TYPE]</IF> <IF COND="[#TYPE]">col-sm-9 col-md-10<ELSE/>col-sm-7 col-md-8</IF>">
+			<div id="inside" class="<IF COND="[#TYPE|is_array]">[#TYPE.TYPE]<ELSE/>[#TYPE]</IF> <IF COND="[#TYPE]">col-sm-9 col-md-10<ELSE/>col-sm-6 col-md-8</IF>">
 			<MACRO NAME="ARIANE">
 </DEFMACRO>
 
 <DEFMACRO NAME="CONCLUSION"> 
 			</div> <!--[ Fin #inside ]-->
             		<IF COND="![#TYPE]"><MACRO NAME="ACTUALITE"></IF>
-            <MACRO NAME="MENUFIXE">
+            		<MACRO NAME="MENUFIXE">
 		</div> <!--[ Fin #content ]-->
-	<MACRO NAME="FOOTER" /> 
+		<MACRO NAME="FOOTER" /> 
 	</div>	<!--[ Fin #main ]-->
 </DEFMACRO>
 
 <DEFMACRO NAME="FOOTER"> 
 	<div id="footer" class="row">
-		<div class="col-sm-2">
+		<div class="col-sm-2 col-md-3">
 			<img src="images/logo_[#SITE].png" height="70px" style="float: left;">
 		</div>
-		<div class="col-sm-8 text-center">
+		<div class="col-sm-8 col-md-6 text-center">
 			ISSN électronique : en cours
         		<br><a href="http://lodel.org/">Edité avec Lodel</a> - <a href="lodel">Accès réservé</a>
 		</div>	
-		<div class="col-sm-2">
+		<div class="col-sm-2 col-md-3">
 			<img src="images/footer_[#SITE].png" height="auto" style="float:right;margin-right:25px;margin-top:10px;">	
 		</div>	
 	</div>
@@ -468,7 +467,7 @@ Home page: http://www.lodel.org
 </DEFFUNC>	
 
 <DEFMACRO NAME="ACTUALITE">
-<div id="actu" class="col-md-2">
+<div id="actu" class="col-sm-3 col-md-2">
 	<LOOP NAME="getRootNotes" TABLE="textessimples" WHERE="section LIKE 'actu'">
             <DOFIRST>
 			<a href="[#ID|makeurlwithid]">[#TITRE]</a>

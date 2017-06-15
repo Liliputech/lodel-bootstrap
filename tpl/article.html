@@ -206,7 +206,7 @@
 				[(#TEXTE|tocable|lettrine|paranumber('texte'))]
 			</div>
 			<IF COND="[#NOTESBASPAGE]">
-				<div id="notes" class="col-md-2">
+				<div id="notes" class="col-md-2 visible-md visible-lg">
 					[(#NOTESBASPAGE|notes("nombre"))]
 				</div>
 			</IF>
@@ -299,8 +299,6 @@
 	<MACRO NAME="DESCRIPTION_AUTEURS">
 	<MACRO NAME="RECENSIONS">
 	</div></div><!-- fin annexes -->
-	<!--<script>sidenotes()</script>-->
-	<script>responsiveImages()</script>
 <MACRO NAME="BLOC_NAVIGATION_DOCUMENTS">
 </div>
 <MACRO NAME="CONCLUSION" />

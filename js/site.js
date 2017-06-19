@@ -59,4 +59,5 @@ window.onload=function(){
 	sidenotes();
 	responsiveImages();
 	$(".fancybox").fancybox();
+	$(".sidenote").dotdotdot();
 };

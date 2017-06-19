@@ -21,7 +21,7 @@ function sidenotes()
 				var sidenote = notes[processedNotes];
 				var marginTop=ps?paraTop-ps.offsetTop-ps.offsetHeight:paraTop;
 				sidenote.style.marginTop=(marginTop>0?marginTop:0)+"px";
-				sidenote.className = "notesbaspage dot-ellipsis dot-resize-update";
+				sidenote.className = "notesbaspage sidenote dot-ellipsis dot-resize-update is-truncated";
 				sidenote.firstChild.setAttribute("href", "#"+sidenote.firstChild.id);
 				sidenote.firstChild.removeAttribute("id");
 				ps = sidenote;

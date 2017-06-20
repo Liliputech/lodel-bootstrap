@@ -60,4 +60,5 @@ window.onload=function(){
 	responsiveImages();
 	$(".fancybox").fancybox();
 	$(".sidenote").dotdotdot();
+	sidenotes();
 };

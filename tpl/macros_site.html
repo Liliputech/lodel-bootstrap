@@ -454,6 +454,17 @@ Home page: http://www.lodel.org
 	</LOOP>
 </DEFMACRO>
 
+<DEFFUNC NAME="LISTE_RUBRIQUE_PARU" REQUIRED="identifier">
+	<LOOP NAME="getAllRubrique" TABLE="publications" WHERE="type LIKE 'rubrique'" ORDER="datepubli DESC">
+		<BEFORE><ul class="publisMenu"></BEFORE>
+                <li>
+                        <a href="[#ID|makeurlwithid]">[#TITRE] : [#SOUSTITRE]</a>
+                </li>
+                <AFTER></ul></AFTER>
+	</LOOP>
+</DEFMACRO>
+
+
 <DEFFUNC NAME="AFFICHER_BILLET" REQUIRED="section">
 	
 	<LOOP NAME="getRootNotes" TABLE="textessimples" WHERE="section LIKE '[#SECTION]'">

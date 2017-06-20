@@ -177,8 +177,8 @@
 	<IF COND="[#DATEPUBLI] le today()">
 		<IF COND="[#TEXTE]">
 			<hr>
-			<a href="#top"><h4>Table des matières</h4></a>
 			<div id="toc" class="well">
+			<a href="#top"><h4>Table des matières</h4></a>
 			<ul>
 			<LET VAR="niveauprecedent" GLOBAL="1">1</LET>
 			<LOOP NAME="toc" TEXT="[#TEXTE]">
@@ -298,7 +298,7 @@
 	<a href="#top"><h4>Auteur</h4></a>
 	<MACRO NAME="DESCRIPTION_AUTEURS">
 	<MACRO NAME="RECENSIONS">
-	</div></div><!-- fin annexes -->
+	</div><!-- fin annexes -->
 <MACRO NAME="BLOC_NAVIGATION_DOCUMENTS">
 </div>
 <MACRO NAME="CONCLUSION" />

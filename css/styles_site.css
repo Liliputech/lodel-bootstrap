@@ -1,3 +1,25 @@
 .sidenote {
 	max-height:6em;
 }
+
+.paranumber {
+	margin-left: -2em;
+	color: lightgray;
+	margin-right: 2em;
+}
+
+.texte {
+	margin-left: 1em;
+}
+
+.informations #shortcuts, .informations #toc, .informations #annexes, .informations #bottomNav {
+	display:none;
+}
+
+#menu {
+	padding:10px;
+}
+
+#menu ul {
+	margin-bottom: 0;
+}

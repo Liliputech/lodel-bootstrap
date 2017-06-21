@@ -57,7 +57,6 @@
                         <IF COND="[#CLASS] == 'textes'">
                                 <LOOP NAME="getDocInfos" TABLE="textes" WHERE="id = [#ID]">
                                         <strong class="auteurs"><MACRO NAME="LISTER_AUTEURS" /></strong>
-                                        <br class="nobr" />
                                         <MACRO NAME="TITRE_DOCUMENT" />
                                 </LOOP>
                         <ELSE />

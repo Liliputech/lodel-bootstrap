@@ -382,7 +382,6 @@ Home page: http://www.lodel.org
 		<a href="[#ID|makeurlwithid]">
 			[#TITRE|removenotes]	
 			<IF COND="[#SOUSTITRE]">
-				<br class="nobr" />
 			 	<span class="sousTitre">
 			 		[#SOUSTITRE|removenotes]
 			 	</span>
@@ -391,7 +390,6 @@ Home page: http://www.lodel.org
 	<ELSE/>
 		[#TITRE|removenotes]	
 		<IF COND="[#SOUSTITRE]">
-			<br class="nobr" />
 			<span class="sousTitre">
 				[#SOUSTITRE|removenotes]
 			</span>
@@ -540,7 +538,7 @@ Home page: http://www.lodel.org
 	<h2 class="publiParente">
         <span></span><MACRO NAME="TITRE_PUBLICATION">
 		<div class="sousTitre">
-			<br class="nobr" /><MACRO NAME="SOUSTITRE_PUBLICATION">
+			<MACRO NAME="SOUSTITRE_PUBLICATION">
 	 	</div>
 	</h2>
 	<IF COND="[#INTRODUCTION]">

@@ -282,14 +282,14 @@ Home page: http://www.lodel.org
 <DEFMACRO NAME="FOOTER"> 
 	<div id="footer" class="row">
 		<div class="col-sm-2 col-md-3">
-			<img src="images/logo_[#SITE].png" height="70px" style="float: left;">
+			<img src="images/footerL.png">
 		</div>
 		<div class="col-sm-8 col-md-6 text-center">
 			ISSN électronique : en cours
         		<br><a href="http://lodel.org/">Edité avec Lodel</a> - <a href="lodel">Accès réservé</a>
 		</div>	
 		<div class="col-sm-2 col-md-3">
-			<img src="images/footer_[#SITE].png" height="auto" style="float:right;margin-right:25px;margin-top:10px;">	
+			<img src="images/footerR.png">	
 		</div>	
 	</div>
 </DEFMACRO>
@@ -453,14 +453,34 @@ Home page: http://www.lodel.org
 </DEFMACRO>
 
 <DEFFUNC NAME="LISTE_RUBRIQUE_PARU" REQUIRED="identifier">
-	<LOOP NAME="getAllRubrique" TABLE="publications" WHERE="type LIKE 'rubrique'" ORDER="datepubli DESC">
-		<BEFORE><ul class="publisMenu"></BEFORE>
-                <li>
-                        <a href="[#ID|makeurlwithid]">[#TITRE] : [#SOUSTITRE]</a>
-                </li>
-                <AFTER></ul></AFTER>
+	<LOOP NAME="idparent" TABLE="entities" WHERE="identifier LIKE '[#IDENTIFIER]'">
+                <LET VAR="idrec">[#ID]</LET>
+		<LOOP NAME="map" TABLE="entities, types" WHERE="idparent = [#IDREC] AND types.id = entities.idtype  AND class NOT IN ('')" ORDER="entities.rank">
+			<BEFORE><ul></BEFORE>
+			<li class="[#CLASS]">
+			<IF COND="[#CLASS] == 'textes'">
+				<LOOP NAME="getDocInfos" TABLE="textes" WHERE="id = [#ID]">
+					<strong class="auteurs"><MACRO NAME="LISTER_AUTEURS" /></strong>
+					<MACRO NAME="TITRE_DOCUMENT" />
+				</LOOP>
+			<ELSE />
+				<IF COND="[#CLASS] == 'fichiers'">
+					<LOOP NAME="getFileInfos" TABLE="fichiers" WHERE="id = [#ID]">
+						<a href="[#DOCUMENT]" class="[#TYPE]">
+							[#TITRE] ([#DOCUMENT|nicefilesize])
+						</a>
+					</LOOP>
+				<ELSE />
+					<a href="[#ID|makeurlwithid]" class="[#TYPE]">[#G_TITLE]</a>
+				</IF>
+			</IF>
+			<LET VAR="idrec">[#ID]</LET>
+			<LOOP NAME="map"></LOOP>
+			</li>
+			<AFTER></ul></AFTER>
+		</LOOP>
 	</LOOP>
-</DEFMACRO>
+</DEFFUNC>
 
 
 <DEFFUNC NAME="AFFICHER_BILLET" REQUIRED="section">

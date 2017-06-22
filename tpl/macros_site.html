@@ -266,13 +266,13 @@ Home page: http://www.lodel.org
 	</div>
 	<div id="content" class="row <IF COND="[#TYPE|is_array]">[#TYPE.TYPE]<ELSE/>[#TYPE]</IF>">
 			<USE TEMPLATEFILE="barre" />
-			<div id="inside" class="<IF COND="[#TYPE|is_array]">[#TYPE.TYPE]<ELSE/>[#TYPE]</IF> <IF COND="[#TYPE]">col-sm-9 col-md-10<ELSE/>col-sm-6 col-md-8</IF>">
+			<div id="inside" class="<IF COND="[#TYPE|is_array]">[#TYPE.TYPE]<ELSE/>[#TYPE]</IF> col-sm-9 col-md-10">
 			<MACRO NAME="ARIANE">
 </DEFMACRO>
 
 <DEFMACRO NAME="CONCLUSION"> 
-			</div> <!--[ Fin #inside ]-->
             		<IF COND="![#TYPE]"><MACRO NAME="ACTUALITE"></IF>
+			</div> <!--[ Fin #inside ]-->
             		<MACRO NAME="MENUFIXE">
 		</div> <!--[ Fin #content ]-->
 		<MACRO NAME="FOOTER" /> 

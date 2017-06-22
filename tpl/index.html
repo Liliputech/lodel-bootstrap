@@ -37,7 +37,7 @@
 // 	ob_end_clean();
 // 	mail('bruno.cenou@revues.org', 'context', $content);
 ?>
-
+<div class="col-sm-9 col-md-10>
 <LOOP NAME="getrevues" TABLE="publications,entities,types" WHERE="publications.identity=entities.id and entities.idtype=types.id and types.type='collection'" SELECT="entities.id,titre,introduction,datepubli" ORDER="datepubli DESC">
 <IF COND="[#INTRODUCTION]">
 	<br>
@@ -79,6 +79,6 @@
 	</LOOP>
 </IF>
 </LOOP>
-
+</div>
 <MACRO NAME="CONCLUSION" />
 <MACRO NAME="FERMER_HTML" />  

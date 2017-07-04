@@ -51,6 +51,8 @@
 		</h3>
 		<div class="auteur"><MACRO NAME="LISTER_AUTEURS"></div>
 	</div></div>
+
+	<IF COND="[#TYPE] != 'informations' AND [#TYPE] != 'editorial'">
 	<div id="shortcuts" class="row">
 		<div class="col-sm-12">
 		<ul class="nav nav-tabs nav-justified">
@@ -171,6 +173,9 @@
 		</IF>
 		</div>
 	</div></div>
+	<ELSE>
+	<hr>
+	</IF>
 					
 		<!--[ ----------------------------------------------------------------------- ]-->
 		<!--[ Cette partie ne s'affiche que si le texte est autorisé à la publication ]-->

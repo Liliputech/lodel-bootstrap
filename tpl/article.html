@@ -95,6 +95,7 @@
 	<div class="col-sm-12 text-justified">
 	<IF COND="[#RESUME]">
 	<a href="#top"><h4 id="abstract">R&eacute;sum&eacute;</h4></a>
+	<br>
 	</IF>
 		<!--[ Affichage du résumé en français   ]-->
 		<ul class="nav nav-tabs" role="tablist">
@@ -176,7 +177,6 @@
 		<!--[ ----------------------------------------------------------------------- ]-->
 	<IF COND="[#DATEPUBLI] le today()">
 		<IF COND="[#TEXTE]">
-			<hr>
 			<div id="toc" class="well">
 			<a href="#top"><h4>Table des matières</h4></a>
 			<ul>
@@ -295,8 +295,10 @@
 		</div>
 	
 	<!--[ Affiche la description des auteurs ]-->		
+	<br>
 	<a href="#top"><h4>Auteur</h4></a>
 	<MACRO NAME="DESCRIPTION_AUTEURS">
+	<br>
 	<MACRO NAME="RECENSIONS">
 	</div><!-- fin annexes -->
 <MACRO NAME="BLOC_NAVIGATION_DOCUMENTS">

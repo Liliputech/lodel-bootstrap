@@ -266,8 +266,7 @@ Home page: http://www.lodel.org
 	</div>
 	<div id="content" class="row <IF COND="[#TYPE|is_array]">[#TYPE.TYPE]<ELSE/>[#TYPE]</IF>">
 			<USE TEMPLATEFILE="barre" />
-			<div id="inside" class="<IF COND="[#TYPE|is_array]">[#TYPE.TYPE]<ELSE/>[#TYPE]</IF> col-sm-9 col-md-10">
-			<MACRO NAME="ARIANE">
+			<div id="inside" class="<IF COND="[#TYPE|is_array]">[#TYPE.TYPE]<ELSE/>[#TYPE]</IF> col-sm-8 col-md-9">
 </DEFMACRO>
 
 <DEFMACRO NAME="CONCLUSION"> 
@@ -284,10 +283,13 @@ Home page: http://www.lodel.org
 		<div class="col-sm-2 col-md-3">
 			<img src="images/footerL.png">
 		</div>
-		<div class="col-sm-8 col-md-6 text-center">
+		<div class="col-sm-6 col-md-3 text-center">
 			ISSN électronique : en cours
         		<br><a href="http://lodel.org/">Edité avec Lodel</a> - <a href="lodel">Accès réservé</a>
 		</div>	
+		<div class="col-sm-2 col-md-3">
+			<img src="images/footerM.png">
+		</div>
 		<div class="col-sm-2 col-md-3">
 			<img src="images/footerR.png">	
 		</div>	
@@ -741,12 +743,12 @@ Home page: http://www.lodel.org
 </DEFMACRO>
 
 <DEFMACRO NAME="BLOC_NAVIGATION_DOCUMENTS">
-	<div id="bottomNav">
-		<div class="previous">
+	<div id="bottomNav" class="row">
+		<div class="previous col-sm-6 text-left">
 			<LOOP NAME="previous" ID="[#ID]" THROUGH="regroupement">
                      		<DO>
 					<a href="[#ID|makeurlwithid]">
-						Article Pr&eacute;c&eacute;dent
+						Article pr&eacute;c&eacute;dent
 					</a>	
                       		</DO>
 				<ALTERNATIVE>
@@ -756,7 +758,7 @@ Home page: http://www.lodel.org
 				</ALTERNATIVE>		
                       </LOOP>
 		</div>
-		<div class="next">
+		<div class="next col-sm-6 text-right">
 			<LOOP NAME="next" ID="[#ID]" THROUGH="regroupement">
 				<DO>
 					<a href="[#ID|makeurlwithid]">

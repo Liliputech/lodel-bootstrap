@@ -39,7 +39,7 @@
 <MACRO NAME="PRELUDE" />
 
 	<div id="enteteDocument" class="row">				               
-		<div class="col-sm-12">
+		<div class="col-sm-offset-1 col-sm-11">
 		<h3>
 			<IF COND="[#SURTITRE]">
 				<span class="surTitre">[#SURTITRE]</span>
@@ -54,7 +54,7 @@
 
 	<IF COND="[#TYPE] != 'informations' AND [#TYPE] != 'editorial'">
 	<div id="shortcuts" class="row">
-		<div class="col-sm-12">
+		<div class="col-sm-offset-1 col-sm-11">
 		<ul class="nav nav-tabs nav-justified">
 		<IF COND="[#ERRATUM]"><li><a href="#erratum">Erratum</a></li></IF>
 		<IF COND="[#RESUME]"><li><a href="#abstract">R&eacute;sum&eacute;</a></li></IF>
@@ -68,7 +68,7 @@
 	</div></div>
 
 	<div id="redac" class="row">
-	<div class="col-sm-12">
+	<div class="col-sm-offset-1 col-sm-11">
 	<!--[ Erratum -]-->
 	<IF COND="[#ERRATUM]">
 		<a href="#top"><h4>Errata</h4></a>
@@ -94,7 +94,7 @@
 	</IF>
 	</div></div>
 	<div id="abstract" class="row">
-	<div class="col-sm-12 text-justified">
+	<div class="col-sm-offset-1 col-sm-11 text-justified">
 	<IF COND="[#RESUME]">
 	<a href="#top"><h4 id="abstract">R&eacute;sum&eacute;</h4></a>
 	<br>
@@ -219,7 +219,7 @@
 		</IF>
 
 		<div id="annexes" class="row">
-		<div class="col-sm-12">
+		<div class="col-sm-offset-1 col-sm-11">
 			<!--[ Bibliographie. Si elle existe -]-->
 			<IF COND="[#BIBLIOGRAPHIE]">
                 		<hr>

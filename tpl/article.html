@@ -207,11 +207,11 @@
 			</IF>
 
 			<div class="row">
-			<div id="texte" class="<IF COND="[#NOTESBASPAGE]">col-md-10<ELSE/>col-md-12</IF> text-justify">
+			<div id="texte" class="<IF COND="[#NOTESBASPAGE]">col-md-8<ELSE/>col-md-11</IF> col-md-offset-1 text-justify">
 				[(#TEXTE|tocable|lettrine|paranumber('texte'))]
 			</div>
 			<IF COND="[#NOTESBASPAGE]">
-				<div id="sidenotes" class="col-md-2 visible-md visible-lg">
+				<div id="sidenotes" class="col-md-3 visible-md visible-lg">
 					[(#NOTESBASPAGE|notes("nombre"))]
 				</div>
 			</IF>

@@ -10,7 +10,7 @@ function insertAfter(newNode, referenceNode) {
 
 function sidenotes()
 {
-	var elem = document.querySelectorAll("#texte > p");
+	var elem = document.querySelectorAll("#texte p");
 	var ps, processedNotes=0 , notes = document.getElementsByClassName("notesbaspage");
 	for (var i = 0; i < elem.length; i++) {
 		var paraNotes=elem[i].getElementsByClassName("footnotecall");

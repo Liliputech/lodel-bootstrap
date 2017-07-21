@@ -39,7 +39,7 @@ function resizeText(multiplier) {
 }
 
 function responsiveImages() {
-  var articleImages = document.querySelectorAll("p.texte>img");
+  var articleImages = document.querySelectorAll("p.texte img");
   for (var i = 0; i < articleImages.length; i++) {
     articleImages[i].classList.add('img-responsive');
     fancybox=document.createElement('a');

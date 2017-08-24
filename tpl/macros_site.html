@@ -208,7 +208,7 @@ Home page: http://www.lodel.org
 		<fieldset class="searchfieldset">
 		<legend>Recherche avanc&eacute;e</legend>
 		<div class="row">
-		<select id="qnbresults" name="qnbresults" class="searchfields col-sm-12">
+		<select id="qnbresults" name="qnbresults" class="searchfields col-md-12">
 			<option value="10" <IF COND="[#QNBRESULTS] EQ 10">selected="selected"</IF>>10 r&eacute;sultats par page</option>
 			<option value="20" <IF COND="[#QNBRESULTS] EQ 20">selected="selected"</IF>>20 r&eacute;sultats par page</option>
 			<option value="50" <IF COND="[#QNBRESULTS] EQ 50">selected="selected"</IF>>50 r&eacute;sultats par page</option>
@@ -218,8 +218,8 @@ Home page: http://www.lodel.org
 		<LOOP NAME="listtypes" TABLE="types" WHERE="search=1"ORDER="rank" >
 		<BEFORE>
 			<div class="row">
-			<label for="qtype" class="col-sm-3">Type</label>
-			<select id="qtype" name="qtype" class="searchfields col-sm-9" <!--[onchange="updatefields(this);"]-->>
+			<label for="qtype" class="col-md-3">Type</label>
+			<select id="qtype" name="qtype" class="searchfields col-md-9" <!--[onchange="updatefields(this);"]-->>
 			<option id="[#CLASS]_[#ID]" value=""> -- Tous -- </option>
 		</BEFORE>
 		<DO>
@@ -232,8 +232,8 @@ Home page: http://www.lodel.org
 		</LOOP>
 		
 		<div class="row">
-		<label for="qfield" class="col-sm-3">Champ</label>
-		<select id="qfield" name="qfield" class="searchfields col-sm-9">
+		<label for="qfield" class="col-md-3">Champ</label>
+		<select id="qfield" name="qfield" class="searchfields col-md-9">
 			<option value=""> -- Tous --</option>
 			<option value="DC.Title" <IF COND="[#QFIELD] EQ 'DC.Title'">selected="selected"</IF>>Titre</option>
 			<option value="DC.Description" <IF COND="[#QFIELD] EQ 'DC.Description'">selected="selected"</IF>>Description</option>
@@ -266,7 +266,7 @@ Home page: http://www.lodel.org
 	</div>
 	<div id="content" class="row <IF COND="[#TYPE|is_array]">[#TYPE.TYPE]<ELSE/>[#TYPE]</IF>">
 			<USE TEMPLATEFILE="barre" />
-			<div id="inside" class="<IF COND="[#TYPE|is_array]">[#TYPE.TYPE]<ELSE/>[#TYPE]</IF> col-sm-8 col-md-9">
+			<div id="inside" class="<IF COND="[#TYPE|is_array]">[#TYPE.TYPE]<ELSE/>[#TYPE]</IF> col-md-8 col-lg-9">
 </DEFMACRO>
 
 <DEFMACRO NAME="CONCLUSION"> 
@@ -280,17 +280,17 @@ Home page: http://www.lodel.org
 
 <DEFMACRO NAME="FOOTER"> 
 	<div id="footer" class="row">
-		<div class="col-sm-12 col-md-3 hidden-xs text-center">
+		<div class="col-md-12 col-lg-3 hidden-sm text-center">
 			<img src="images/footerL.png">
 		</div>
-		<div class="col-sm-12 col-md-3 text-center infoFooter">
+		<div class="col-md-12 col-lg-3 text-center infoFooter">
 			ISSN électronique : en cours
         		<br><a href="http://lodel.org/">Edité avec Lodel</a> - <a href="lodel">Accès réservé</a>
 		</div>	
-		<div class="col-sm-6 col-md-3 hidden-xs text-center">
+		<div class="col-md-6 col-lg-3 hidden-sm text-center">
 			<img src="images/footerM.png">
 		</div>
-		<div class="col-sm-6 col-md-3 text-center">
+		<div class="col-md-6 col-lg-3 text-center">
 			<img src="images/footerR.png">	
 		</div>	
 	</div>
@@ -498,7 +498,7 @@ Home page: http://www.lodel.org
 </DEFFUNC>	
 
 <DEFMACRO NAME="ACTUALITE">
-<div id="actu" class="col-sm-3 col-md-2">
+<div id="actu" class="col-md-3 col-lg-2">
 	<LOOP NAME="getRootNotes" TABLE="textessimples" WHERE="section LIKE 'actu'">
             <DOFIRST>
 			<a href="[#ID|makeurlwithid]">[#TITRE]</a>
@@ -728,7 +728,7 @@ Home page: http://www.lodel.org
 
 <DEFMACRO NAME="ARIANE">
 	<div class="row">
-	<div class="col-sm-12">
+	<div class="col-md-12">
 	<ul id="ariane" class="nav navbar-nav">
 		<li><a href="index.[#EXTENSIONSCRIPTS]">Accueil</a></li>
 		<LOOP NAME="ariane" TABLE="relations, entities" WHERE="id2 = '[#ID]' AND nature = 'P' AND id1 = entities.id" ORDER="degree DESC">
@@ -744,7 +744,7 @@ Home page: http://www.lodel.org
 
 <DEFMACRO NAME="BLOC_NAVIGATION_DOCUMENTS">
 	<div id="bottomNav" class="row">
-		<div class="previous col-sm-6 text-left">
+		<div class="previous col-md-6 text-left">
 			<LOOP NAME="previous" ID="[#ID]" THROUGH="regroupement">
                      		<DO>
 					<a href="[#ID|makeurlwithid]">
@@ -758,7 +758,7 @@ Home page: http://www.lodel.org
 				</ALTERNATIVE>		
                       </LOOP>
 		</div>
-		<div class="next col-sm-6 text-right">
+		<div class="next col-md-6 text-right">
 			<LOOP NAME="next" ID="[#ID]" THROUGH="regroupement">
 				<DO>
 					<a href="[#ID|makeurlwithid]">
